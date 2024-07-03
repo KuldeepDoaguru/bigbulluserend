@@ -1,0 +1,30 @@
+.head-main {
+  box-shadow: 0px 0px 10px rgb(209, 209, 209);
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  font-size: 40px;
+  padding: 10px 0px;
+}
+
+.searchbar {
+  display: flex;
+  width: auto;
+  margin: 20px;
+  box-shadow: 0px 0px 10px gray;
+  padding: 10px;
+  border-radius: 10px;
+  align-items: center;
+}
+
+.searchbar input {
+  border: none;
+  outline: none;
+  width: 100%;
+  margin-left: 10px;
+}
+
+.searchbar svg {
+  width: 20px;
+  color: #583b04;
+}
