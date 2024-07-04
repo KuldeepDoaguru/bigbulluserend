@@ -115,18 +115,10 @@ const Leaderboard = () => {
             <table class="table table-bordered">
               <thead className="table-head">
                 <tr>
-                  <th className="table-sno" style={{ width: "10%" }}>
-                    SN
-                  </th>
-                  <th className="table-small" style={{ width: "20%" }}>
-                    Email ID
-                  </th>
-                  <th className="table-small" style={{ width: "20%" }}>
-                    User name
-                  </th>
-                  <th className="table-small" style={{ width: "10%" }}>
-                    Total Amount
-                  </th>
+                  <th className="sticky">SN</th>
+                  <th className="sticky">Email ID</th>
+                  <th className="sticky">User name</th>
+                  <th className="sticky">Total Amount</th>
                 </tr>
               </thead>
               <tbody>
@@ -144,18 +136,10 @@ const Leaderboard = () => {
                   .map((user, i) => {
                     return (
                       <tr className="table-row" key={user.id}>
-                        <td className="table-sno" style={{ width: "10%" }}>
-                          {i + 1}
-                        </td>
-                        <td className="table-small" style={{ width: "20%" }}>
-                          {user.email}
-                        </td>
-                        <td className="table-small" style={{ width: "20%" }}>
-                          {user.name}
-                        </td>
-                        <td className="table-small" style={{ width: "10%" }}>
-                          ₹ {user.amount}
-                        </td>
+                        <td className="table-sno">{i + 1}</td>
+                        <td className="table-small">{user.email}</td>
+                        <td className="table-small">{user.name}</td>
+                        <td className="table-small">₹ {user.amount}</td>
                       </tr>
                     );
                   })}
@@ -174,5 +158,20 @@ const Container = styled.div`
   .table-head {
     background-color: #583b04;
     color: white;
+  }
+
+  th {
+    background-color: #583b04;
+    color: white;
+    position: sticky;
+    white-space: nowrap;
+  }
+
+  td {
+    white-space: break-spaces;
+  }
+
+  .table-responsive {
+    max-height: 30rem;
   }
 `;

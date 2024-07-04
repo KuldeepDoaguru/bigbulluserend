@@ -764,6 +764,67 @@ const getBoughtCourseDetails = (req, res) => {
   }
 };
 
+const updateAdminDetails = async (req, res) => {
+  try {
+    const adminId = req.params.aid;
+    const { approved_by, status } = req.body;
+
+    const getQuery = `SELECT * FROM admin_register WHERE admin_id = ?`;
+    db.query(getQuery, [adminId], (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Internal server error",
+        });
+      }
+
+      if (result && result.length > 0) {
+        const updateFields = [];
+        const updateValues = [];
+
+        if (approved_by) {
+          updateFields.push("approved_by = ?");
+          updateValues.push(approved_by);
+        }
+
+        if (status) {
+          updateFields.push("status = ?");
+          updateValues.push(status);
+        }
+
+        const updateQuery = `UPDATE admin_register SET ${updateFields.join(
+          ", "
+        )} WHERE admin_id = ?`;
+
+        db.query(updateQuery, [...updateValues, adminId], (err, result) => {
+          if (err) {
+            return res.status(500).json({
+              success: false,
+              message: "Failed to update details",
+            });
+          } else {
+            return res.status(200).json({
+              success: true,
+              message: "Admin Approved successfully",
+            });
+          }
+        });
+      } else {
+        return res.status(404).json({
+          success: false,
+          message: "admin not found",
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
 module.exports = {
   registerController,
   // loginController,
@@ -783,4 +844,5 @@ module.exports = {
   contactInquiry,
   getBoughtCourseDetails,
   // sendOtpAdminRegistration,
+  updateAdminDetails,
 };

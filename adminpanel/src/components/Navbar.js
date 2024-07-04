@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { clearUser } from "../redux/slices/UserSlicer";
+import { RiAdminFill, RiAdminLine } from "react-icons/ri";
 
 const Navbar = () => {
   const location = useLocation();
@@ -63,47 +64,6 @@ const Navbar = () => {
                   </button>
                 )}
               </Link>
-
-              {/* <Link to="/webinars">
-            {location.pathname === "/webinars" ||
-            location.pathname === "/marketingtools" ||
-            location.pathname === "/offer" ||
-            location.pathname === "/training" ||
-            location.pathname === "/homecarousel" ? (
-              <button className="iconbtn-active">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            ) : (
-              <button className="iconbtn-inactive">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-                <p className={"notification-circle"}></p>
-              </button>
-            )}
-          </Link> */}
 
               <Link to="/manageusers">
                 {" "}
@@ -170,42 +130,18 @@ const Navbar = () => {
                   </button>
                 )}
               </Link>
-              {/* <Link to="/payments" style={{ textDecoration: "none" }}>
-            {location.pathname === "/payments" ? (
-              <button className="iconbtn-active">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 5a1 1 0 100 2h1a2 2 0 011.732 1H7a1 1 0 100 2h2.732A2 2 0 018 11H7a1 1 0 00-.707 1.707l3 3a1 1 0 001.414-1.414l-1.483-1.484A4.008 4.008 0 0011.874 10H13a1 1 0 100-2h-1.126a3.976 3.976 0 00-.41-1H13a1 1 0 100-2H7z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </button>
-            ) : (
-              <button className="iconbtn-inactive">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 8h6m-5 0a3 3 0 110 6H9l3 3m-3-6h6m6 1a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <p className={"notification-circle"}></p>
-              </button>
-            )}
-          </Link> */}
+              <Link to="/manage-admin" style={{ textDecoration: "none" }}>
+                {location.pathname === "/manage-admin" ? (
+                  <button className="iconbtn-active">
+                    <RiAdminFill className="currentColor fs-1" />
+                  </button>
+                ) : (
+                  <button className="iconbtn-inactive">
+                    <RiAdminLine className="currentColor" />
+                    <p className={"notification-circle"}></p>
+                  </button>
+                )}
+              </Link>
             </div>
 
             <div className="right">

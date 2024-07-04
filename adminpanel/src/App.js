@@ -31,6 +31,7 @@ import { setUser } from "./redux/slices/UserSlicer";
 import AddChapter from "./components/Course/Manage_Course_Video/AddChapter";
 import ShowChapter from "./components/Course/Manage_Course_Video/ShowChapter";
 import EditCourseChapter from "./components/Course/Manage_Course_Video/EditCourseChapter";
+import ManageAdmin from "./pages/ManageAdmin";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -68,6 +69,7 @@ const App = () => {
         <Route path="/payto/:uemail" element={<Payto />} />
         <Route path="/admin-register" element={<RegisterAdmin />} />
         <Route path="/password-reset" element={<ForgotPassword />} />
+        <Route path="/manage-admin" element={<ManageAdmin />} />
       </Routes>
     </BrowserRouter>
   );

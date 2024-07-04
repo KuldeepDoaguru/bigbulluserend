@@ -48,7 +48,7 @@ const createCourse = async (req, res) => {
     if (!thumbnails) {
       return res.status(400).json({ error: "Thumbnail is required" });
     }
-    const imageUrl = `https://admin.bigbulls.co.in/thumbnails/${thumbnails.filename}`;
+    const imageUrl = `http://localhost:6060/thumbnails/${thumbnails.filename}`;
 
     const values = [name, description, price, category, imageUrl];
     const insertQuery = `INSERT INTO courses (course_name, description, price, category, thumbnails) VALUES (?, ?, ?,?, ?)`;
@@ -132,7 +132,7 @@ const editCourse = async (req, res) => {
     const { name, description, price, category } = req.body;
     const thumbnails = req.file;
 
-    const imageUrl = `https://admin.bigbulls.co.in/thumbnails/${thumbnails?.filename}`;
+    const imageUrl = `http://localhost:6060/thumbnails/${thumbnails?.filename}`;
     const getQuery = `SELECT * FROM courses WHERE course_id = ?`;
 
     db.query(getQuery, courseId, (err, result) => {
@@ -370,7 +370,7 @@ const addChapterData = (req, res) => {
       return res.status(400).json({ error: "Thumbnail is required" });
     }
 
-    const questionUrl = `https://admin.bigbulls.co.in/questionSheet/${questionSheet.filename}`;
+    const questionUrl = `http://localhost:6060/questionSheet/${questionSheet.filename}`;
     console.log(questionUrl);
 
     const getQuery = `SELECT * FROM courses WHERE course_id = ?`;

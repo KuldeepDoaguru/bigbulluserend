@@ -5,9 +5,10 @@ import ManageNav from "./ManageNav";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./Addvideo.css";
+// import "./Addvideo.css";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const Addvideo = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -75,11 +76,22 @@ const Addvideo = () => {
     chapterIDList();
   }, []);
 
+  const goBack = () => {
+    window.history.go(-1);
+  };
+
   return (
     <>
       <Container>
         <div className="addvideo-outer">
           <Navbar />
+          <div className="w-100">
+            <div className="mx-2">
+              <button className="btn btn-success backbtn" onClick={goBack}>
+                <IoMdArrowRoundBack /> Back
+              </button>
+            </div>
+          </div>
           <ManageNav
             editcourse={false}
             addvideo={true}
@@ -87,83 +99,105 @@ const Addvideo = () => {
             courseid={cid}
           />
           <div className="head-main"> Add New Video </div>
-          <form onSubmit={addVideoCourse} encType="multipart/form-data">
-            <div className="form-inner">
-              <div>
-                <label>Video Title</label>
-                <input
-                  name="title"
-                  onChange={(e) => {
-                    setvideotitle(e.target.value);
-                  }}
-                  placeholder="Enter Video Title"
-                  required
-                />
+          <form
+            className="mt-3"
+            onSubmit={addVideoCourse}
+            encType="multipart/form-data"
+          >
+            <div className="row">
+              <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-1 col-sm-12 col-12"></div>
+              <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-10 col-sm-12 col-12">
+                <div className="inputMain shadow">
+                  <div className="row g-3">
+                    <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div>
+                        <label className="form-label">Video Title</label>
+                        <input
+                          name="title"
+                          className="form-control"
+                          onChange={(e) => {
+                            setvideotitle(e.target.value);
+                          }}
+                          placeholder="Enter Video Title"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div>
+                        <label className="form-label">Video duration</label>
+                        <input
+                          name="duration"
+                          className="form-control"
+                          onChange={(e) => {
+                            setvideoDuration(e.target.value);
+                          }}
+                          placeholder="Enter Video Duration"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div>
+                        <label className="form-label">Chapter ID</label>
+                        <select
+                          name="chapterID"
+                          required
+                          className="form-control"
+                          onChange={(e) => {
+                            setChapterID(e.target.value);
+                          }}
+                        >
+                          <option value="">Select an Option</option>
+                          {chapterList?.map((item) => (
+                            <option key={item.ch_id} value={item.ch_id}>
+                              {item.ch_id}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div>
+                        <label className="form-label">
+                          Video<span className="spantag"> (* mp4 or mkv)</span>
+                        </label>
+                        <input
+                          type="file"
+                          className="form-control"
+                          name="videoFile"
+                          disabled={!chapterID ? true : false}
+                          required
+                          onChange={(e) => {
+                            setcoursevideo(e.target.files[0]);
+                          }}
+                          placeholder="Upload Video"
+                          accept="video/mp4, video/mkv"
+                        />
+                      </div>
+                    </div>
+                    <div className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div className="form-textarea">
+                        <label className="form-label">Video Description</label>
+                        <textarea
+                          name="video_description"
+                          required
+                          className="form-control"
+                          onChange={(e) => {
+                            setvideodescription(e.target.value);
+                          }}
+                          placeholder="Enter Video Description"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <div>
-                <label>Video duration</label>
-                <input
-                  name="duration"
-                  onChange={(e) => {
-                    setvideoDuration(e.target.value);
-                  }}
-                  placeholder="Enter Video Duration"
-                  required
-                />
-              </div>
+              <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-1 col-sm-12 col-12"></div>
             </div>
-
-            <div className="form-inner">
-              <div>
-                <label>Chapter ID</label>
-                <select
-                  name="chapterID"
-                  required
-                  onChange={(e) => {
-                    setChapterID(e.target.value);
-                  }}
-                >
-                  <option value="">Select an Option</option>
-                  {chapterList?.map((item) => (
-                    <option key={item.ch_id} value={item.ch_id}>
-                      {item.ch_id}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label>
-                  Video<span className="spantag"> (* mp4 or mkv)</span>
-                </label>
-                <input
-                  type="file"
-                  name="videoFile"
-                  disabled={!chapterID ? true : false}
-                  required
-                  onChange={(e) => {
-                    setcoursevideo(e.target.files[0]);
-                  }}
-                  placeholder="Upload Video"
-                  accept="video/mp4, video/mkv"
-                />
-              </div>
+            <div className="subbtn">
+              <button type="submit">Submit</button>
             </div>
-
-            <div className="form-textarea">
-              <label>Video Description</label>
-              <textarea
-                name="video_description"
-                required
-                onChange={(e) => {
-                  setvideodescription(e.target.value);
-                }}
-                placeholder="Enter Video Description"
-              />
-            </div>
-
-            <button type="submit">Submit</button>
           </form>
         </div>
         <ToastContainer />
@@ -176,5 +210,34 @@ export default Addvideo;
 const Container = styled.div`
   textarea {
     border: 1px solid #e0e0e0;
+  }
+
+  .backbtn {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    justify-content: start;
+    gap: 4px;
+  }
+
+  .inputMain {
+    padding: 2rem;
+    border-radius: 15px;
+  }
+
+  .subbtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 0rem;
+    button {
+      background-color: black;
+      color: white;
+      font-weight: 600;
+      padding: 5px 10px;
+      font-size: 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   }
 `;

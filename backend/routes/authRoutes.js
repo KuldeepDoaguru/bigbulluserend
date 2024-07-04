@@ -13,6 +13,7 @@ const {
   contactInquiry,
   getBoughtCourseDetails,
   sendOtpAdminRegistration,
+  updateAdminDetails,
 } = require("../controllers/authController.js");
 const {
   addCourseVideos,
@@ -95,5 +96,6 @@ router.get("/profilePictureView/:userId", authenticate, profilePictureView);
 router.get("/contactInquiry", authenticate, contactInquiry);
 router.get("/getBoughtCourseDetails", authenticate, getBoughtCourseDetails);
 // router.post("/sendOtpAdminRegistration", sendOtpAdminRegistration);
+router.put("/updateAdminDetails/:aid", updateAdminDetails);
 
 module.exports = router;

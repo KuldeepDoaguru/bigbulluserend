@@ -6,6 +6,8 @@ import { ToastContainer } from "react-toastify";
 import axios from "axios";
 import cogoToast from "cogo-toast";
 import { useSelector } from "react-redux";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import styled from "styled-components";
 
 const ShowChapter = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -60,96 +62,148 @@ const ShowChapter = () => {
     chapterIDList();
   }, []);
 
+  const goBack = () => {
+    window.history.go(-1);
+  };
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
   return (
     <>
-      <div className="recentpurchases-outer">
-        <Navbar />
-        <ManageNav
-          editcourse={false}
-          addvideo={false}
-          showvideos={false}
-          courseid={cid}
-          addChapter={false}
-          showchapter={true}
-        />
-        <div className="head-main"> Update Course Chapter </div>
-
-        <div className="searchbar">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-          <input
-            placeholder="Search Course Video"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value.toLowerCase())}
+      <Container>
+        <div className="">
+          <Navbar />
+          <div className="w-100">
+            <div className="mx-2">
+              <button className="btn btn-success backbtn" onClick={goBack}>
+                <IoMdArrowRoundBack /> Back
+              </button>
+            </div>
+          </div>
+          <ManageNav
+            editcourse={false}
+            addvideo={false}
+            showvideos={false}
+            courseid={cid}
+            addChapter={false}
+            showchapter={true}
           />
-        </div>
+          <div className="head-main text-center"> Update Course Chapter </div>
 
-        <div className="table">
-          <div className="table-head">
-            <p style={{ width: "5%" }} className="text-center">
-              Chapter ID
-            </p>
-            <p style={{ width: "25%" }} className="text-center">
-              Chapter Name
-            </p>
-            <p style={{ width: "40%" }} className="text-center">
-              Question Sheet Link
-            </p>
-            <p style={{ width: "15%" }} className="text-center">
-              Edit
-            </p>
-            <p style={{ width: "15%" }} className="text-center">
-              Delete
-            </p>
+          <div className="searchbar">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            <input
+              placeholder="Search Course Chapter"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value.toLowerCase())}
+            />
           </div>
-          <div className="table-body">
-            {chapterList
-              .filter((val) => {
-                if (keyword === "") {
-                  return true;
-                } else if (
-                  val.ch_name.toLowerCase().includes(keyword) ||
-                  val.ch_name.toLowerCase().includes(keyword)
-                ) {
-                  return val;
-                }
-              })
-              .map((video, index) => (
-                <div className="table-row" key={video.ch_id}>
-                  <p style={{ width: "5%" }}>{video.ch_id}</p>
-
-                  <p style={{ width: "25%" }}>{video.ch_name}</p>
-                  <p style={{ width: "40%" }}>{video.question_sheet}</p>
-                  {/* <p style={{ width: "15%" }}>{video.chapter_id}</p> */}
-                  <Link to={`/editchapter/${cid}/${video.ch_id}`}>
-                    <button style={{ width: "100%" }}>Edit</button>
-                  </Link>
-                  <button
-                    onClick={() => deleteChapter(video.ch_id)}
-                    style={{ width: "15%" }}
-                  >
-                    Delete
-                  </button>
-                </div>
-              ))}
+          <div class="container table-responsive">
+            <table class="table table-bordered">
+              <thead className="table-head">
+                <tr>
+                  <th className="sticky">Chapter ID</th>
+                  <th className="sticky">Chapter Name</th>
+                  <th className="sticky">Question Sheet Link</th>
+                  <th className="sticky">Edit</th>
+                  <th className="sticky">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {chapterList
+                  .filter((val) => {
+                    if (keyword === "") {
+                      return true;
+                    } else if (
+                      val.ch_name.toLowerCase().includes(trimmedKeyword)
+                    ) {
+                      return val;
+                    }
+                  })
+                  .map((video, index) => {
+                    return (
+                      <tr className="table-row" key={video.ch_id}>
+                        <td>{video.ch_id}</td>
+                        <td className="table-small">{video.ch_name}</td>
+                        <td className="table-small">{video.question_sheet}</td>
+                        <td className="table-email">
+                          {" "}
+                          <Link to={`/editchapter/${cid}/${video.ch_id}`}>
+                            <button
+                              style={{ width: "100%" }}
+                              className="btn btn-success infobtn shadow"
+                            >
+                              Edit
+                            </button>
+                          </Link>
+                        </td>
+                        <td>
+                          {" "}
+                          <button
+                            onClick={() => deleteChapter(video.ch_id)}
+                            className="btn btn-danger bg-dark mx-2 shadow"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
-      <ToastContainer />
+        <ToastContainer />
+      </Container>
     </>
   );
 };
 
 export default ShowChapter;
+const Container = styled.div`
+  .backbtn {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    justify-content: start;
+    gap: 4px;
+  }
+
+  th {
+    background-color: #583b04;
+    color: white;
+    position: sticky;
+    white-space: nowrap;
+  }
+
+  td {
+    white-space: nowrap;
+  }
+
+  .sticky {
+    position: sticky;
+    top: 0;
+    background-color: #583b04;
+    color: white;
+    z-index: 1;
+  }
+
+  .infobtn {
+    background-color: #583b04;
+    color: white;
+  }
+`;

@@ -14,7 +14,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.currentUser);
-  console.log(user.token);
+  console.log(user?.token);
   const [invoices, setInvoices] = useState([]);
   const [keyword, setkeyword] = useState("");
   const [usersreg, setuserseg] = useState([]);
@@ -40,7 +40,7 @@ const Dashboard = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${user?.token}`,
           },
         }
       );
@@ -67,7 +67,7 @@ const Dashboard = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${user?.token}`,
           },
         }
       );

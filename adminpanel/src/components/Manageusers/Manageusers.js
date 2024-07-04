@@ -108,7 +108,7 @@ const Manageusers = () => {
             <table class="table table-bordered">
               <thead className="table-head">
                 <tr>
-                  <th className="sticky">Sno.</th>
+                  <th className="sticky">User ID</th>
                   <th className="sticky">Name</th>
                   <th className="sticky">Email</th>
                   <th className="sticky">Gender</th>
@@ -133,14 +133,14 @@ const Manageusers = () => {
                   .map((e, i) => {
                     return (
                       <tr className="table-row" key={e.id}>
-                        <td>{i + 1}</td>
+                        <td>{e.id}</td>
                         <td>{e.name}</td>
                         <td>{e.email}</td>
                         <td>{e.gender}</td>
                         <td>{e.phone}</td>
                         <td>
                           <button
-                            className="btn btn-danger"
+                            className="btn btn-danger bg-dark"
                             onClick={() => deleteUser(e.id)}
                           >
                             Delete
@@ -151,7 +151,7 @@ const Manageusers = () => {
                             to={`/edituserdetails/${e.id}`}
                             style={{ textDecoration: "none" }}
                           >
-                            <button className="btn btn-info">Edit</button>
+                            <button className="btn btn-info btnin">Edit</button>
                           </Link>
                         </td>
                       </tr>
@@ -190,6 +190,11 @@ const Container = styled.div`
     background-color: #583b04;
     color: white;
     position: sticky;
+    white-space: nowrap;
+  }
+
+  td {
+    white-space: break-spaces;
   }
 
   .sticky {
@@ -198,5 +203,10 @@ const Container = styled.div`
     background-color: #583b04;
     color: white;
     z-index: 1;
+  }
+
+  .btnin {
+    background-color: #583b04;
+    color: white;
   }
 `;

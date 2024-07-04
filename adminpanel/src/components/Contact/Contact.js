@@ -130,6 +130,7 @@ const Container = styled.div`
     background-color: #583b04;
     color: white;
     position: sticky;
+    white-space: nowrap;
   }
 
   .sticky {

@@ -34,6 +34,9 @@ const EditUserpage = () => {
     address: userData.address || "",
   });
 
+  console.log(data);
+  console.log(userData);
+
   const getAllCountries = async () => {
     try {
       const res = await axios.get(
@@ -53,14 +56,14 @@ const EditUserpage = () => {
   };
 
   const countryFilter = allCountries?.filter((country) => {
-    if (data.country === "") {
+    if (data.country === userData.country) {
       return country.name === userData.country;
     } else {
       return country.name === data.country;
     }
   });
 
-  console.log(countryFilter);
+  console.log(countryFilter[0]?.iso2);
 
   const getAllStates = async () => {
     try {
@@ -81,7 +84,7 @@ const EditUserpage = () => {
   };
 
   const filterCities = allStates?.filter((state) => {
-    if (data.state === "") {
+    if (data.state === userData.state) {
       return state.name === userData.state;
     } else {
       return state.name === data.state;
@@ -118,11 +121,11 @@ const EditUserpage = () => {
 
   useEffect(() => {
     getAllStates();
-  }, [data.country]);
+  }, [countryFilter]);
 
   useEffect(() => {
     getAllCities();
-  }, [data.state]);
+  }, [filterCities]);
 
   // const allCountries = Object.keys(countryToStatesMap);
 

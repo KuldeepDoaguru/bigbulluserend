@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import cogoToast from "cogo-toast";
 import { useSelector } from "react-redux";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const AddChapter = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -35,10 +36,14 @@ const AddChapter = () => {
       );
       console.log(response);
       cogoToast.success("Chapter Added succesfully");
-      setChapterName("");
+      navigate(`/showchapter/${cid}`);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const goBack = () => {
+    window.history.go(-1);
   };
 
   return (
@@ -46,6 +51,13 @@ const AddChapter = () => {
       <Container>
         <div className="editcourse-outer">
           <Navbar />
+          <div className="mx-2">
+            <div className="">
+              <button className="btn btn-success backbtn" onClick={goBack}>
+                <IoMdArrowRoundBack /> Back
+              </button>
+            </div>
+          </div>
           <ManageNav
             editcourse={false}
             addvideo={false}
@@ -57,23 +69,27 @@ const AddChapter = () => {
           <div className="head-main">Add Chapters</div>
           <div className="new-form">
             <form onSubmit={addChapter} encType="multipart/form-data">
-              <div className="form-inner">
+              <div className="form-inner shadow">
                 <div className="s2">
-                  <div>
-                    <label>Chapter Name</label>
+                  <div className="d-flex flex-column gap-1">
+                    <label className="text-start fw-bold">Chapter Name</label>
                     <input
                       type="text"
                       name="chName"
+                      required
                       placeholder="chapter name"
                       value={chapterName}
+                      className="p-1 border rounded"
                       onChange={(e) => setChapterName(e.target.value)}
                     />
                   </div>
-                  <div>
-                    <label>Question Sheet</label>
+                  <div className="d-flex flex-column gap-1 mt-3">
+                    <label className="text-start fw-bold">Question Sheet</label>
                     <input
                       type="file"
                       filename="questionSheet"
+                      required
+                      className="p-1"
                       onChange={(e) => {
                         setQuestionSheet(e.target.files[0]);
                       }}
@@ -86,7 +102,10 @@ const AddChapter = () => {
               <div className="hrline"></div>
 
               <div className="s4">
-                <button type="submit" className="btn btn-success">
+                <button
+                  type="submit"
+                  className="btn btn-success successbtn shadow mb-2"
+                >
                   Submit
                 </button>
                 {/* <button className="btn btn-danger">Delete this Course</button> */}
@@ -100,4 +119,37 @@ const AddChapter = () => {
 };
 
 export default AddChapter;
-const Container = styled.div``;
+const Container = styled.div`
+  .backbtn {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    justify-content: start;
+    gap: 4px;
+  }
+
+  form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 2rem;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .form-inner {
+    border: 2px solid grey;
+    padding: 2rem;
+    border-radius: 15px;
+  }
+
+  .successbtn {
+    background: black;
+    color: white;
+    &:hover {
+      background: wheat;
+      color: black;
+      border: none;
+    }
+  }
+`;

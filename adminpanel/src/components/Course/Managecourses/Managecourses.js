@@ -42,17 +42,20 @@ const Managecourses = () => {
 
   const deleteCourse = async (id) => {
     try {
-      const res = await axios.delete(
-        `http://localhost:6060/api/v1/auth/deleteCourse/${id}`,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      console.log(res);
-      window.location.reload();
+      const confirm = window.confirm("Are you sure you want to delete");
+      if (confirm) {
+        const res = await axios.delete(
+          `http://localhost:6060/api/v1/auth/deleteCourse/${id}`,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        console.log(res);
+        getCourse();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -117,6 +120,7 @@ const Managecourses = () => {
                       <a
                         href={`http://localhost:5500/course-details/${result._id}`}
                         target="_blank"
+                        rel="noopener noreferrer"
                       >
                         {result.name}
                       </a>
@@ -126,93 +130,16 @@ const Managecourses = () => {
               </div>
             )}
           </div>
-          {/* <div className="table">
-            <div className="table-head">
-              <th className="table-small" style={{ width: "25%" }}>
-                Course Name
-              </th>
-              <th className="table-small" style={{ width: "15%" }}>
-                Course Category
-              </th>
-              <th className="table-email" style={{ width: "15%" }}>
-                Courses Price
-              </th>
-              <th className="table-btn" style={{ width: "10%" }}>
-                Delete
-              </th>
-
-              <th className="table-btn" style={{ width: "10%" }}>
-                Edit
-              </th>
-            </div>
-            <div className="table-body">
-              {allCourses
-                ?.filter((val) => {
-                  if (keyword === "") {
-                    return true;
-                  } else if (
-                    val.course_name.toLowerCase().includes(keyword) ||
-                    val.course_name.toLowerCase().includes(keyword)
-                  ) {
-                    return val;
-                  }
-                })
-                .map((item, index) => (
-                  <>
-                    <div className="table-row" key={index}>
-                      <td className="table-small" style={{ width: "25%" }}>
-                        <a
-                          href={`https://bigbulls.co.in/course-details/${item.course_id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <span>
-                            <FaExternalLinkAlt />
-                          </span>
-                          {item.course_name}
-                        </a>
-                      </td>
-                      <td className="table-small" style={{ width: "15%" }}>
-                        {item.category}
-                      </td>
-                      <td className="table-email" style={{ width: "15%" }}>
-                        {item.price}
-                      </td>
-                      <td
-                        className="table-btn"
-                        style={{ color: "black" }}
-                        onClick={() => deleteCourse(item.course_id)}
-                      >
-                        Delete
-                      </td>
-                      <Link
-                        to={`/editcourse/${item.course_id}`}
-                        style={{ textDecoration: "none", width: "10%" }}
-                      >
-                        <td className="table-btn">Edit</td>
-                      </Link>
-                    </div>
-                  </>
-                ))}
-            </div>
-          </div> */}
 
           <div class="table-responsive">
             <table class="table table-bordered">
               <thead className="table-head">
                 <tr>
-                  <th className="table-small" style={{ width: "25%" }}>
-                    Course Name
-                  </th>
-                  <th className="table-small" style={{ width: "15%" }}>
-                    Course Category
-                  </th>
-                  <th className="table-email" style={{ width: "15%" }}>
-                    Courses Price
-                  </th>
-                  <th style={{ width: "10%" }}>Delete</th>
-
-                  <th style={{ width: "10%" }}>Edit</th>
+                  <th className="sticky">Course Name</th>
+                  <th className="sticky">Course Category</th>
+                  <th className="sticky">Courses Price</th>
+                  <th className="sticky">Delete</th>
+                  <th className="sticky">Edit</th>
                 </tr>
               </thead>
               <tbody>
@@ -250,7 +177,7 @@ const Managecourses = () => {
                         </td>
                         <td>
                           <button
-                            className="btn btn-danger"
+                            className="btn btn-danger bg-dark"
                             onClick={() => deleteCourse(item.course_id)}
                           >
                             Delete
@@ -262,7 +189,9 @@ const Managecourses = () => {
                             to={`/editcourse/${item.course_id}`}
                             style={{ textDecoration: "none", width: "10%" }}
                           >
-                            <button className="btn btn-info">Edit</button>
+                            <button className="btn btn-info infobtn">
+                              Edit
+                            </button>
                           </Link>
                         </td>
                       </tr>
@@ -302,6 +231,29 @@ const Container = styled.div`
   }
 
   .table-head {
+    background-color: #583b04;
+    color: white;
+  }
+  th {
+    background-color: #583b04;
+    color: white;
+    position: sticky;
+    white-space: nowrap;
+  }
+
+  td {
+    white-space: nowrap;
+  }
+
+  .sticky {
+    position: sticky;
+    top: 0;
+    background-color: #583b04;
+    color: white;
+    z-index: 1;
+  }
+
+  .infobtn {
     background-color: #583b04;
     color: white;
   }
