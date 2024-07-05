@@ -26,7 +26,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:6060/api/v1/auth/sendOtp",
+        "https://admin.bigbulls.co.in/api/v1/auth/sendOtp",
         {
           email,
         }
@@ -42,7 +42,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:6060/api/v1/auth/adminLoginUser",
+        "https://admin.bigbulls.co.in/api/v1/auth/adminLoginUser",
         {
           email,
           password,
@@ -93,7 +93,7 @@ const Login = () => {
       e.preventDefault();
       try {
         const response = await axios.post(
-          "http://localhost:6060/api/v1/auth/verifyOtp",
+          "https://admin.bigbulls.co.in/api/v1/auth/verifyOtp",
           {
             email,
             otp,

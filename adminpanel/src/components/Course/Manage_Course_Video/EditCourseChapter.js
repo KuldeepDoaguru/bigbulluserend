@@ -28,7 +28,7 @@ const EditCourseChapter = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:6060/api/v1/auth/updateChapterDataViaChid/${cid}/${chid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/updateChapterDataViaChid/${cid}/${chid}`,
         formdata,
         {
           headers: {
@@ -48,7 +48,7 @@ const EditCourseChapter = () => {
   const deleteChapter = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:6060/api/v1/auth/deleteChapterDataViaChid/${chid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/deleteChapterDataViaChid/${chid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -68,7 +68,7 @@ const EditCourseChapter = () => {
   const getChapterViaChid = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:6060/api/v1/auth/getChapterDataViaChid/${chid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/getChapterDataViaChid/${chid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -92,8 +92,7 @@ const EditCourseChapter = () => {
   return (
     <>
       <Container>
-        <div className="addvideo-outer">
-          <Navbar />
+        <div className="addvideo-outer paddingtop">
           <ManageNav
             editcourse={false}
             addvideo={false}
@@ -107,9 +106,10 @@ const EditCourseChapter = () => {
             <img src={chapterList[0]?.question_sheet} alt="question sheet" />
             <div className="form-inner">
               <div>
-                <label>Chapter Name</label>
+                <label className="form-label fw-bold">Chapter Name</label>
                 <input
                   name="chName"
+                  className="form-control"
                   onChange={(e) => {
                     setChapterName(e.target.value);
                   }}
@@ -118,9 +118,10 @@ const EditCourseChapter = () => {
               </div>
 
               <div>
-                <label>Question Sheet</label>
+                <label className="form-label fw-bold">Question Sheet</label>
                 <input
                   type="file"
+                  className="form-control"
                   filename="questionSheet"
                   onChange={(e) => {
                     setQuestionSheet(e.target.files[0]);
@@ -130,9 +131,14 @@ const EditCourseChapter = () => {
                 />
               </div>
             </div>
-            <div className="d-flex justify-content-evenly w-100">
-              <button type="submit">Submit</button>
-              <button className="btn btn-ouline-danger" onClick={deleteChapter}>
+            <div className="d-flex justify-content-center w-100">
+              <button type="submit" className="btn btn-danger successbtn">
+                Submit
+              </button>
+              <button
+                className="btn btn-ouline-danger mx-2"
+                onClick={deleteChapter}
+              >
                 Delete
               </button>
             </div>
@@ -148,5 +154,37 @@ export default EditCourseChapter;
 const Container = styled.div`
   textarea {
     border: 1px solid #e0e0e0;
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
+  }
+
+  form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 2rem;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .form-inner {
+    border: 2px solid grey;
+    padding: 2rem;
+    border-radius: 15px;
+  }
+
+  .successbtn {
+    background: black;
+    color: white;
+    &:hover {
+      background: wheat;
+      color: black;
+      border: none;
+    }
   }
 `;

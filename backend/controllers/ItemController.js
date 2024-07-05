@@ -7,35 +7,6 @@ dotenv.config();
 
 const PORT = process.env.PORT;
 
-const addToCart = async (req, res) => {
-  try {
-    const { userId, productId, quantity, price } = req.body;
-
-    // Check if the user's cart exists; create it if not
-    let cart = await Cart.findOne({ user: userId });
-    if (!cart) {
-      cart = new Cart({
-        user: userId,
-        items: [],
-      });
-    }
-
-    // Add the item to the cart
-    cart.items.push({
-      product: productId,
-      quantity,
-      price,
-    });
-
-    await cart.save();
-
-    res.status(201).json({ message: "Item added to the cart successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
 const createCourse = async (req, res) => {
   try {
     // Extract course data from the request body
@@ -75,31 +46,6 @@ const getAllCourses = async (req, res) => {
         res.status(200).json({ result });
       }
     });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-const thumbnail = async (req, res) => {
-  try {
-    const courseId = req.params.courseId;
-    const course = await Course.findById(courseId);
-
-    console.log("Course:", course);
-
-    if (!course) {
-      return res.status(404).json({ error: "Course not found" });
-    }
-
-    console.log("Thumbnails:", course.thumbnails);
-
-    if (!course.thumbnails || course.thumbnails.length === 0) {
-      return res.status(404).json({ error: "Course thumbnails not found" });
-    }
-
-    // Send the image data as the response
-    res.send(course.thumbnails);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -248,96 +194,6 @@ const videoListViaCourseId = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-const addToWishlist = async (req, res) => {
-  try {
-    const { userId, productId } = req.params;
-
-    // Find the user's wishlist or create a new one if it doesn't exist
-    let wishlist = await Wishlist.findOne({ user: userId });
-
-    if (!wishlist) {
-      wishlist = new Wishlist({
-        user: userId,
-        items: [productId],
-      });
-    } else {
-      // Check if the product is already in the wishlist
-      if (!wishlist.items.includes(productId)) {
-        wishlist.items.push(productId);
-      }
-    }
-
-    await wishlist.save();
-
-    res
-      .status(201)
-      .json({ message: "Product added to the wishlist successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-const getWishlistItems = async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const wishlist = await Wishlist.findOne({ user: userId });
-
-    if (!wishlist) {
-      return res.status(404).json({ error: "Item not found in the wishlist" });
-    }
-
-    return res.status(200).json({ wishlist });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-const addtocartBack = async (req, res) => {
-  try {
-    const { userId, productId } = req.params;
-
-    // Find the user's wishlist or create a new one if it doesn't exist
-    let wishlist = await Cart.findOne({ user: userId });
-
-    if (!wishlist) {
-      wishlist = new Cart({
-        user: userId,
-        items: [productId],
-      });
-    } else {
-      // Check if the product is already in the wishlist
-      if (!wishlist.items.includes(productId)) {
-        wishlist.items.push(productId);
-      }
-    }
-
-    await wishlist.save();
-
-    res.status(201).json({ message: "Product added to the cart successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-const getCartItems = async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const CartItem = await Cart.findOne({ user: userId });
-
-    if (!CartItem) {
-      return res.status(404).json({ error: "Item not found in the Cart" });
-    }
-
-    return res.status(200).json({ CartItem });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -708,19 +564,13 @@ const deleteVideoViaVid = (req, res) => {
 };
 
 module.exports = {
-  addToCart,
   createCourse,
   getAllCourses,
-  thumbnail,
   coursePage,
   editCourse,
   deleteCourse,
   addCourseVideos,
   videoListViaCourseId,
-  addToWishlist,
-  addtocartBack,
-  getCartItems,
-  getWishlistItems,
   LeaderBoardData,
   addChapterData,
   addCourseVideos,

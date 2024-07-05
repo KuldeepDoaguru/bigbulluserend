@@ -21,7 +21,7 @@ const Managecourses = () => {
   const getCourse = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:6060/api/v1/auth/getAllCourses",
+        "https://admin.bigbulls.co.in/api/v1/auth/getAllCourses",
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -45,7 +45,7 @@ const Managecourses = () => {
       const confirm = window.confirm("Are you sure you want to delete");
       if (confirm) {
         const res = await axios.delete(
-          `http://localhost:6060/api/v1/auth/deleteCourse/${id}`,
+          `https://admin.bigbulls.co.in/api/v1/auth/deleteCourse/${id}`,
           {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -78,8 +78,7 @@ const Managecourses = () => {
   return (
     <>
       <Container>
-        <Navbar />
-        <div className="container">
+        <div className="container paddingtop">
           <div className="head-main">Manage Courses</div>
           <div className="searchbar">
             <svg
@@ -256,5 +255,12 @@ const Container = styled.div`
   .infobtn {
     background-color: #583b04;
     color: white;
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
   }
 `;

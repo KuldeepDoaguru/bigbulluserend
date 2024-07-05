@@ -88,58 +88,6 @@ const registerController = async (req, res) => {
   }
 };
 
-// const loginController = async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-//     console.log(req.body);
-//     //validation
-//     if (!email || !password) {
-//       return res.status(404).send({
-//         success: false,
-//         message: "Invalid email or password",
-//       });
-//     }
-
-//     //check user
-//     const user = await userModel.findOne({ email });
-//     if (!user) {
-//       return res.status(404).send({
-//         success: false,
-//         message: "Email is not registered",
-//       });
-//     }
-
-//     const match = await bcrypt.compare(password, user.password);
-//     if (!match) {
-//       return res.status(200).send({
-//         success: false,
-//         message: "Invalid Password",
-//       });
-//     }
-
-//     //token
-//     const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
-//       expiresIn: "7d",
-//     });
-
-//     res.status(200).send({
-//       success: true,
-//       message: "login successfully",
-//       user: {
-//         _id: user._id,
-//         name: user.name,
-//         email: user.email,
-//         phone: user.phone,
-//         address: user.address,
-//       },
-//       token,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send({ success: false, message: "Error in login", error });
-//   }
-// };
-
 const sendOtp = (req, res) => {
   const { email } = req.body;
 
@@ -223,59 +171,6 @@ const sendOtp = (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json("An error occurred.");
-  }
-};
-
-const updatePassword = async (req, res) => {
-  try {
-    const { email, password, cpassword, otp } = req.body;
-    console.log(req.body);
-    if (!email || !password || !cpassword || !otp) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid email, password, or OTP",
-      });
-    }
-
-    // Fetch the user based on the provided email
-    const user = await userModel.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    // otpmatch
-    const otpDocument = await otpModel.findOne({ email });
-    if (!otpDocument || otpDocument.code !== otp) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid OTP",
-      });
-    }
-
-    // Hash both the "password" and "cpassword"
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const hashedCPassword = await bcrypt.hash(cpassword, saltRounds);
-
-    await userModel.findByIdAndUpdate(user._id, {
-      password: hashedPassword,
-      cpassword: hashedCPassword,
-    });
-    res.status(200).send({
-      success: true,
-      message: "Password Reset Successfully",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Something went wrong",
-      error,
-    });
   }
 };
 
@@ -629,36 +524,6 @@ const updateAdminPassword = async (req, res) => {
   }
 };
 
-const updateProfilePicture = async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const profilePicture = req.file.filename;
-
-    if (!profilePicture) {
-      return res
-        .status(400)
-        .json({ error: "Please provide a valid profile picture." });
-    }
-
-    const user = await userModel.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found." });
-    }
-
-    // Update the user's profilePicture field
-    user.profilePicture = profilePicture;
-
-    // Save the user with the updated profilePicture
-    await user.save();
-    return res
-      .status(200)
-      .json({ message: "Profile picture updated successfully." });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
 const profilePictureView = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -825,24 +690,34 @@ const updateAdminDetails = async (req, res) => {
   }
 };
 
+const getAdmin = (req, res) => {
+  try {
+    const selectQuery = "SELECT * FROM admin_register";
+    db.query(selectQuery, (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      res.status(200).send(result);
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   registerController,
-  // loginController,
   sendOtp,
-  updatePassword,
   manageUsers,
   updateUsers,
   getUserViaId,
   AdminRegister,
   adminLoginUser,
-  // sendOtpAdmin,
   verifyOtp,
   updateAdminPassword,
-  updateProfilePicture,
   profilePictureView,
   deleteUser,
   contactInquiry,
   getBoughtCourseDetails,
-  // sendOtpAdminRegistration,
   updateAdminDetails,
+  getAdmin,
 };

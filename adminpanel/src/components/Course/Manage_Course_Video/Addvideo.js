@@ -33,7 +33,7 @@ const Addvideo = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:6060/api/v1/auth/courses/${cid}/videos`,
+        `https://admin.bigbulls.co.in/api/v1/auth/courses/${cid}/videos`,
         addvideoformdata,
         {
           headers: {
@@ -55,7 +55,7 @@ const Addvideo = () => {
   const chapterIDList = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:6060/api/v1/auth/getChapterViaId/${cid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/getChapterViaId/${cid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -83,8 +83,7 @@ const Addvideo = () => {
   return (
     <>
       <Container>
-        <div className="addvideo-outer">
-          <Navbar />
+        <div className="addvideo-outer paddingtop">
           <div className="w-100">
             <div className="mx-2">
               <button className="btn btn-success backbtn" onClick={goBack}>
@@ -238,6 +237,13 @@ const Container = styled.div`
       font-size: 15px;
       border-radius: 5px;
       cursor: pointer;
+    }
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
     }
   }
 `;

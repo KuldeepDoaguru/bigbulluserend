@@ -1,15 +1,101 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { FaExternalLinkAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import cogoToast from "cogo-toast";
 
 const ManageAdmin = () => {
+  const user = useSelector((state) => state.user.currentUser);
+  console.log(user);
+  const [adminList, setAdminList] = useState([]);
+  const [keyword, setKeyword] = useState("");
+
+  const getAdminData = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://admin.bigbulls.co.in/api/v1/auth/getAdmin`,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      setAdminList(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(adminList);
+  useEffect(() => {
+    getAdminData();
+  }, []);
+
+  const trimmedKeyword = keyword.trim().toLowerCase();
+  console.log(trimmedKeyword);
+
+  const approveAdmin = async (id) => {
+    try {
+      const confirm = window.confirm(
+        "Are you sure you want to approve this admin?"
+      );
+      if (confirm) {
+        const response = await axios.put(
+          `https://admin.bigbulls.co.in/api/v1/auth/updateAdminDetails/${id}`,
+          {
+            approved_by: user.email,
+            status: "active",
+          }
+        );
+        getAdminData();
+        cogoToast.success("Admin Approved Successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const disApproveAdmin = async (id) => {
+    try {
+      const confirm = window.confirm(
+        "Are you sure you want to disapprove this admin?"
+      );
+      if (confirm) {
+        const response = await axios.put(
+          `https://admin.bigbulls.co.in/api/v1/auth/updateAdminDetails/${id}`,
+          {
+            approved_by: user.email,
+            status: "notactive",
+          }
+        );
+        getAdminData();
+        cogoToast.success("Admin Approved Successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Container>
-        <div>
-          <Navbar />
+        <div className="paddingtop">
           <div className="head-main">Manage Admin</div>
           <div className="container">
+            <div>
+              <input
+                placeholder="Search by email"
+                value={keyword}
+                className="inputsearch shadow"
+                onChange={(e) => setKeyword(e.target.value.toLowerCase())}
+                type="text"
+              />
+            </div>
+
             <div class="table-responsive mt-3">
               <table class="table table-bordered">
                 <thead className="table-head">
@@ -18,66 +104,55 @@ const ManageAdmin = () => {
                     <th className="sticky">Admin Email</th>
                     <th className="sticky">Status</th>
                     <th className="sticky">Approved By</th>
-                    <th className="sticky">Edit</th>
-                    <th className="sticky">Delete</th>
+                    <th className="sticky">Action</th>
+                    {/* <th className="sticky">Delete</th> */}
                   </tr>
                 </thead>
-                {/* <tbody>
-                {allCourses
-                  .filter((val) => {
-                    if (keyword === "") {
-                      return true;
-                    } else if (
-                      val.name.toLowerCase().includes(keyword) ||
-                      val.name.toLowerCase().includes(keyword)
-                    ) {
-                      return val;
-                    }
-                  })
-                  .map((item, i) => {
-                    return (
-                      <tr className="table-row" key={item.id}>
-                        <td className="table-small" style={{ width: "25%" }}>
-                          <a
-                            href={`https://bigbulls.co.in/course-details/${item.course_id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <span>
-                              <FaExternalLinkAlt />
-                            </span>
-                            {item.course_name}
-                          </a>
-                        </td>
-                        <td className="table-small" style={{ width: "15%" }}>
-                          {item.category}
-                        </td>
-                        <td className="table-email" style={{ width: "15%" }}>
-                          {item.price}
-                        </td>
-                        <td>
-                          <button
-                            className="btn btn-danger bg-dark"
-                            onClick={() => deleteCourse(item.course_id)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-
-                        <td>
-                          <Link
-                            to={`/editcourse/${item.course_id}`}
-                            style={{ textDecoration: "none", width: "10%" }}
-                          >
-                            <button className="btn btn-info infobtn">
-                              Edit
-                            </button>
-                          </Link>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody> */}
+                <tbody>
+                  {adminList
+                    .filter((val) => {
+                      if (keyword === "") {
+                        return true;
+                      } else if (
+                        val.email.toLowerCase().includes(trimmedKeyword)
+                      ) {
+                        return val;
+                      }
+                    })
+                    .map((item, i) => {
+                      return (
+                        <tr className="table-row" key={item.admin_id}>
+                          <td className="table-small">{item.admin_id}</td>
+                          <td className="table-small">{item.email}</td>
+                          <td className="table-email">{item.status}</td>
+                          <td>
+                            {item.status === "active" ? item.approved_by : ""}
+                          </td>
+                          <td>
+                            {item.status === "active" ? (
+                              <>
+                                <button
+                                  className="btn btn-info infobtn"
+                                  onClick={() => disApproveAdmin(item.admin_id)}
+                                >
+                                  Inactive
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  className="btn btn-info"
+                                  onClick={() => approveAdmin(item.admin_id)}
+                                >
+                                  active
+                                </button>
+                              </>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
               </table>
             </div>
           </div>
@@ -111,5 +186,26 @@ const Container = styled.div`
   .infobtn {
     background-color: #583b04;
     color: white;
+  }
+
+  .inputsearch {
+    width: 90%;
+    margin-top: 1rem;
+    border-radius: 15px;
+    padding: 0.5rem 1rem;
+    &:focus {
+      border: 1px solid grey;
+    }
+  }
+
+  .table-responsive {
+    max-height: 30rem;
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
   }
 `;

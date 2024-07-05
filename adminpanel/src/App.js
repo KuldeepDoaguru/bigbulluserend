@@ -32,6 +32,7 @@ import AddChapter from "./components/Course/Manage_Course_Video/AddChapter";
 import ShowChapter from "./components/Course/Manage_Course_Video/ShowChapter";
 import EditCourseChapter from "./components/Course/Manage_Course_Video/EditCourseChapter";
 import ManageAdmin from "./pages/ManageAdmin";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -39,6 +40,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      {user.currentUser !== null && <Navbar />}
       <Routes>
         <Route
           path="/"

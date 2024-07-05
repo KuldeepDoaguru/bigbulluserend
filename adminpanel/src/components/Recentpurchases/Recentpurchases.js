@@ -24,7 +24,7 @@ const Recentpurchases = () => {
   const getBoughtCourseData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:6060/api/v1/auth/getBoughtCourseDetails",
+        "https://admin.bigbulls.co.in/api/v1/auth/getBoughtCourseDetails",
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -49,7 +49,7 @@ const Recentpurchases = () => {
     }
   };
 
-  data.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  // data.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
   console.log(data);
 
   useEffect(() => {

@@ -21,7 +21,7 @@ const ShowVideos = () => {
   const displayCourseVideo = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:6060/api/v1/auth/videoListViaCourseId/${cid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/videoListViaCourseId/${cid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -43,7 +43,7 @@ const ShowVideos = () => {
   const deleteVideoViaID = async (vid) => {
     try {
       const response = await axios.delete(
-        `http://localhost:6060/api/v1/auth/deleteVideoViaVid/${vid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/deleteVideoViaVid/${vid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -71,8 +71,7 @@ const ShowVideos = () => {
   return (
     <>
       <Container>
-        <div className="">
-          <Navbar />
+        <div className="paddingtop">
           <div className="w-100">
             <div className="mx-2">
               <button className="btn btn-success backbtn" onClick={goBack}>
@@ -211,5 +210,16 @@ const Container = styled.div`
   .infobtn {
     background-color: #583b04;
     color: white;
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
+  }
+
+  .table-responsive {
+    max-height: 30rem;
   }
 `;

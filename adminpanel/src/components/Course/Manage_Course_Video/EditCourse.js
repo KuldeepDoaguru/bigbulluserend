@@ -26,7 +26,7 @@ const EditCourse = () => {
   const getCourseViaID = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:6060/api/v1/auth/coursePage/${cid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/coursePage/${cid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -66,7 +66,7 @@ const EditCourse = () => {
   //   console.log(cid);
   //   try {
   //     const res = await axios.get(
-  //       `http://localhost:6060/api/v1/auth/coursePage/${cid}`
+  //       `https://admin.bigbulls.co.in/api/v1/auth/coursePage/${cid}`
   //     );
   //     console.log(res.data);
   //     setcourseimg(res.data);
@@ -84,7 +84,7 @@ const EditCourse = () => {
     e.preventDefault();
     try {
       const res = await axios.put(
-        `http://localhost:6060/api/v1/auth/editCourse/${cid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/editCourse/${cid}`,
         courseformdata,
         {
           headers: {
@@ -108,7 +108,7 @@ const EditCourse = () => {
       const confirm = window.confirm("Are you sure you want to delete");
       if (confirm) {
         const res = await axios.delete(
-          `http://localhost:6060/api/v1/auth/deleteCourse/${cid}`,
+          `https://admin.bigbulls.co.in/api/v1/auth/deleteCourse/${cid}`,
           {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -141,8 +141,7 @@ const EditCourse = () => {
   return (
     <>
       <Container>
-        <div className="editcourse-outer">
-          <Navbar />
+        <div className="editcourse-outer paddingtop">
           <div className="mx-2">
             <div className="">
               <button className="btn btn-success backbtn" onClick={goBack}>
@@ -376,5 +375,12 @@ const Container = styled.div`
 
   .roundedupload {
     border-radius: 20px;
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
   }
 `;

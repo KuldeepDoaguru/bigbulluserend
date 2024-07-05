@@ -19,7 +19,7 @@ const RegisterAdmin = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:6060/api/v1/auth/sendOtp",
+        "https://admin.bigbulls.co.in/api/v1/auth/sendOtp",
         {
           email,
         }
@@ -37,7 +37,7 @@ const RegisterAdmin = () => {
   const verifyOtpAdmin = async (otp) => {
     try {
       const response = await axios.post(
-        "http://localhost:6060/api/v1/auth/verifyOtp",
+        "https://admin.bigbulls.co.in/api/v1/auth/verifyOtp",
         {
           email,
           otp,
@@ -57,7 +57,7 @@ const RegisterAdmin = () => {
   const registerAdmin = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:6060/api/v1/auth/AdminRegister",
+        "https://admin.bigbulls.co.in/api/v1/auth/AdminRegister",
         {
           email,
           password,

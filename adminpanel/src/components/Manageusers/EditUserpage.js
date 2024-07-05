@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./EditUserpage.css";
+// import "./EditUserpage.css";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../Navbar";
 import DatePicker from "react-datepicker";
@@ -132,7 +132,7 @@ const EditUserpage = () => {
   const getUserViaId = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:6060/api/v1/auth/getUserViaId/${uid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/getUserViaId/${uid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -171,7 +171,7 @@ const EditUserpage = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:6060/api/v1/auth/users/${uid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/users/${uid}`,
         data,
         {
           headers: {
@@ -214,7 +214,7 @@ const EditUserpage = () => {
       phone: userData.phone,
       email: userData.email,
       gender: userData.gender,
-      dob: "",
+      dob: userData.dob,
       country: userData.country,
       state: userData.state,
       city: userData.city,
@@ -229,8 +229,7 @@ const EditUserpage = () => {
   return (
     <>
       <Container>
-        <div className="user-profile">
-          <Navbar />
+        <div className="user-profile paddingtop">
           <div className="head-main">Update User Data</div>
           <div className="container-fluid mt-4">
             <button className="btn btn-success backbtn" onClick={goBack}>
@@ -240,144 +239,172 @@ const EditUserpage = () => {
           </div>
           <div className="userprofile-container">
             <form onSubmit={updateUserProfile}>
-              <div className="content-half">
-                <label>Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={data.name}
-                  onChange={handleInputs}
-                  placeholder={userData.name}
-                />
+              <div className="row g-2">
+                <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                  <div className="content-half">
+                    <label className="form-label">Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={data.name}
+                      className="form-control"
+                      onChange={handleInputs}
+                      placeholder={userData.name}
+                    />
+                  </div>
+                </div>
+                <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                  <div className="content-half">
+                    <label className="form-label">Phone</label>
+                    <input
+                      type="text"
+                      name="phone"
+                      value={data.phone}
+                      onChange={handleInputs}
+                      className="form-control"
+                      placeholder={userData.phone}
+                      maxLength={10}
+                    />
+                  </div>
+                </div>
+                <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                  {" "}
+                  <div className="content-half">
+                    <label className="form-label">Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={data.email}
+                      className="form-control"
+                      onChange={handleInputs}
+                      placeholder={userData.email}
+                    />
+                  </div>
+                </div>
+                <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                  <div className="content-half">
+                    <label className="form-label">Gender</label>
+                    <select
+                      id="gender"
+                      name="gender"
+                      className="form-control"
+                      defaultValue={data.gender}
+                      onChange={handleInputs}
+                      placeholder={userData.gender}
+                    >
+                      <option disabled>{userData.gender}</option>
+                      <option>Male</option>
+                      <option>Female</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                  <div className="content-half">
+                    <label className="form-label">DOB</label>
+
+                    <input
+                      type="date"
+                      className="form-control"
+                      onChange={handleInputs}
+                      name="dob"
+                      value={data.dob}
+                    />
+
+                    {/* <DatePicker
+                    selected={data.dob}
+                    onChange={(date) => handleDateChange(date)}
+                    className="form-control"
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText={formattedDate}
+                    // value={formattedDate}
+                    placeholder={formattedDate}
+                    showMonthDropdown={true}
+                    showYearDropdown={true}
+                    scrollableYearDropdown={false}
+                  /> */}
+                  </div>
+                </div>
+                <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                  <div className="content-half">
+                    <label className="form-label">Select Country</label>
+                    <select
+                      id="country"
+                      name="country"
+                      value={data.country}
+                      onChange={handleInputs}
+                      placeholder={userData.country}
+                      className="form-control"
+                    >
+                      <option value="">{userData.country}</option>
+                      {allCountries.map((country) => (
+                        <option key={country.name} value={country.name}>
+                          {country.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                  <div className="content-half">
+                    <label className="form-label">Select State</label>
+                    <select
+                      id="state"
+                      name="state"
+                      value={data.state}
+                      onChange={handleInputs}
+                      placeholder={userData.state}
+                      className="form-control"
+                      disabled={!data.country}
+                    >
+                      <option value="">{userData.state}</option>
+                      {allStates.map((state) => (
+                        <option key={state.name} value={state.name}>
+                          {state.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                  <div className="content-half">
+                    <label className="form-label">Enter City</label>
+                    <select
+                      name="city"
+                      value={data.city}
+                      onChange={handleInputs}
+                      placeholder={userData.city}
+                      className="form-control"
+                      disabled={!data.country && !data.state}
+                    >
+                      <option value="">{userData.city}</option>
+                      {allCities.map((state) => (
+                        <option key={state.name} value={state.name}>
+                          {state.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                  {" "}
+                  <div className="contentfullwidth mt-3">
+                    <label className="form-label">Address</label>
+                    <textarea
+                      name="address"
+                      defaultValue={data.address}
+                      onChange={handleInputs}
+                      className="form-control"
+                      placeholder={userData.address}
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="content-half">
-                <label>Phone</label>
-                <input
-                  type="text"
-                  name="phone"
-                  value={data.phone}
-                  onChange={handleInputs}
-                  placeholder={userData.phone}
-                  maxLength={10}
-                />
-              </div>
-
-              <div className="content-half">
-                <label>Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={data.email}
-                  onChange={handleInputs}
-                  placeholder={userData.email}
-                />
-              </div>
-              <div className="content-half">
-                <label>Gender</label>
-                <select
-                  id="gender"
-                  name="gender"
-                  defaultValue={data.gender}
-                  onChange={handleInputs}
-                  placeholder={userData.gender}
-                >
-                  <option disabled>{userData.gender}</option>
-                  <option>Male</option>
-                  <option>Female</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div className="content-half">
-                <label>DOB</label>
-                {/* <small>Current DOB : {userData.dob}</small> */}
-                <DatePicker
-                  selected={data.dob}
-                  onChange={(date) => handleDateChange(date)}
-                  className="form-control"
-                  dateFormat="yyyy-MM-dd"
-                  placeholderText={formattedDate}
-                  // value={formattedDate}
-                  placeholder={formattedDate}
-                  showMonthDropdown={true}
-                  showYearDropdown={true}
-                  scrollableYearDropdown={false}
-                />
-              </div>
-              <div className="content-half">
-                <label>Select Country</label>
-                <select
-                  id="country"
-                  name="country"
-                  value={data.country}
-                  onChange={handleInputs}
-                  placeholder={userData.country}
-                  className="inputsel"
-                >
-                  <option value="">{userData.country}</option>
-                  {allCountries.map((country) => (
-                    <option key={country.name} value={country.name}>
-                      {country.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="content-half">
-                <label>Select State</label>
-                <select
-                  id="state"
-                  name="state"
-                  value={data.state}
-                  onChange={handleInputs}
-                  placeholder={userData.state}
-                  className="inputsel"
-                  disabled={!data.country}
-                >
-                  <option value="">{userData.state}</option>
-                  {allStates.map((state) => (
-                    <option key={state.name} value={state.name}>
-                      {state.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="content-half">
-                <label>Enter City</label>
-                {/* <input
-                  name="city"
-                  value={data.city}
-                  onChange={handleInputs}
-                  placeholder={userData.city}
-                /> */}
-
-                <select
-                  name="city"
-                  value={data.city}
-                  onChange={handleInputs}
-                  placeholder={userData.city}
-                  className="inputsel"
-                  disabled={!data.country && !data.state}
-                >
-                  <option value="">{userData.city}</option>
-                  {allCities.map((state) => (
-                    <option key={state.name} value={state.name}>
-                      {state.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="contentfullwidth mt-3">
-                <label>Address</label>
-                <textarea
-                  name="address"
-                  defaultValue={data.address}
-                  onChange={handleInputs}
-                  placeholder={userData.address}
-                />
-              </div>
-
-              <div className="btn-group">
-                <button type="submit">Save Changes</button>
+              <div className="">
+                <button className="btn btn-danger bg-dark mt-2" type="submit">
+                  Save Changes
+                </button>
                 {/* <button onClick={Deleteuser}>Delete User</button> */}
               </div>
             </form>
@@ -396,5 +423,41 @@ const Container = styled.div`
     align-items: center;
     gap: 4px;
     background-color: #000;
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
+  }
+
+  .user-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    .userprofile-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      width: 100%;
+      height: 100%;
+      /* background-color: aqua; */
+    }
+    form {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      background-color: white;
+      /* width: 50%; */
+      padding: 20px;
+      box-shadow: 0px 0px 10px gray;
+      border-radius: 10px;
+      margin: 20px;
+    }
   }
 `;

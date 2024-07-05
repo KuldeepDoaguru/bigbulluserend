@@ -25,7 +25,7 @@
 //     e.preventDefault();
 //     try {
 //       const response = await axios.post(
-//         "http://localhost:6060/api/v1/auth/sendOtp",
+//         "https://admin.bigbulls.co.in/api/v1/auth/sendOtp",
 //         {
 //           email,
 //         }
@@ -41,7 +41,7 @@
 //     e.preventDefault();
 //     try {
 //       const response = await axios.post(
-//         "http://localhost:6060/api/v1/auth/verifyOtp",
+//         "https://admin.bigbulls.co.in/api/v1/auth/verifyOtp",
 //         {
 //           email,
 //           otp,
@@ -59,7 +59,7 @@
 //     e.preventDefault();
 //     try {
 //       const response = await axios.put(
-//         "http://localhost:6060/api/v1/auth/updateAdminPassword",
+//         "https://admin.bigbulls.co.in/api/v1/auth/updateAdminPassword",
 //         {
 //           email,
 //           password,
@@ -252,7 +252,7 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:6060/api/v1/auth/sendOtp",
+        "https://admin.bigbulls.co.in/api/v1/auth/sendOtp",
         {
           email,
         }
@@ -279,7 +279,7 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:6060/api/v1/auth/verifyOtp",
+        "https://admin.bigbulls.co.in/api/v1/auth/verifyOtp",
         {
           email,
           otp,
@@ -302,7 +302,7 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       const response = await axios.put(
-        "http://localhost:6060/api/v1/auth/updateAdminPassword",
+        "https://admin.bigbulls.co.in/api/v1/auth/updateAdminPassword",
         {
           email,
           password: newPassword,

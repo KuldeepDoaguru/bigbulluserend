@@ -18,7 +18,7 @@ const Leaderboard = () => {
   const getLeaderBoardDetails = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:6060/api/v1/auth/LeaderBoardData",
+        "https://admin.bigbulls.co.in/api/v1/auth/LeaderBoardData",
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -36,7 +36,7 @@ const Leaderboard = () => {
   const getAllUsers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:6060/api/v1/auth/usersList",
+        "https://admin.bigbulls.co.in/api/v1/auth/usersList",
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -59,7 +59,7 @@ const Leaderboard = () => {
   console.log(allUser);
   console.log(userLeader);
 
-  const result = userLeader.reduce((acc, item) => {
+  const result = userLeader?.reduce((acc, item) => {
     // Check if the user exists in allUser
     const userExists = allUser.some((user) => user.id === item.id);
     if (userExists) {
@@ -86,8 +86,7 @@ const Leaderboard = () => {
   return (
     <>
       <Container>
-        <div className="container">
-          <Navbar />
+        <div className="container paddingtop">
           <div className="head-main">Leaderboard</div>
           <div className="searchbar">
             <svg
@@ -133,6 +132,7 @@ const Leaderboard = () => {
                       return val;
                     }
                   })
+                  .sort((a, b) => b.amount - a.amount)
                   .map((user, i) => {
                     return (
                       <tr className="table-row" key={user.id}>
@@ -173,5 +173,12 @@ const Container = styled.div`
 
   .table-responsive {
     max-height: 30rem;
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
   }
 `;

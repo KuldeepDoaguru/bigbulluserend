@@ -26,7 +26,7 @@ const EditCourseVideo = () => {
   const getVideoViaID = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:6060/api/v1/auth/getVideoViaVideoID/${vid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/getVideoViaVideoID/${vid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -52,7 +52,7 @@ const EditCourseVideo = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:6060/api/v1/auth/updateCourseVideoDetails/${vid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/updateCourseVideoDetails/${vid}`,
         addvideoformdata,
         {
           headers: {
@@ -72,7 +72,7 @@ const EditCourseVideo = () => {
   const deleteVideoViaID = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:6060/api/v1/auth/deleteVideoViaVid/${vid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/deleteVideoViaVid/${vid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -97,7 +97,7 @@ const EditCourseVideo = () => {
   const chapterIDList = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:6060/api/v1/auth/getChapterViaId/${cid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/getChapterViaId/${cid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -121,8 +121,7 @@ const EditCourseVideo = () => {
   return (
     <>
       <Container>
-        <div className="addvideo-outer">
-          <Navbar />
+        <div className="addvideo-outer paddingtop">
           <ManageNav
             editcourse={true}
             addvideo={false}
@@ -131,90 +130,113 @@ const EditCourseVideo = () => {
             addChapter={false}
           />
           <div className="head-main"> Edit Video </div>
-          <form onSubmit={updateVideo} encType="multipart/form-data">
-            <video
-              src={videoData[0]?.video_url}
-              controls
-              width={"100%"}
-              controlsList="nodownload"
-            />
-            <div className="form-inner">
-              <div>
-                <label>Video Title</label>
-                <input
-                  name="title"
-                  onChange={(e) => {
-                    setvideotitle(e.target.value);
-                  }}
-                  placeholder={videoData[0]?.title}
+          <form onSubmit={updateVideo} encType="multipart/form-data mt-3">
+            <div className="row g-3 mt-3 p-3">
+              <div className="col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
+                <video
+                  src={videoData[0]?.video_url}
+                  controls
+                  width={"100%"}
+                  controlsList="nodownload"
                 />
               </div>
-
-              <div>
-                <label>Video duration</label>
-                <input
-                  name="duration"
-                  onChange={(e) => {
-                    setvideoDuration(e.target.value);
-                  }}
-                  placeholder={videoData[0]?.duration}
-                />
+              <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                <div className="row g-3">
+                  <div className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div>
+                      <label className="form-label fw-bold">Video Title</label>
+                      <input
+                        name="title"
+                        className="form-control"
+                        onChange={(e) => {
+                          setvideotitle(e.target.value);
+                        }}
+                        placeholder={videoData[0]?.title}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div>
+                      <label className="form-label fw-bold">
+                        Video duration
+                      </label>
+                      <input
+                        name="duration"
+                        className="form-control"
+                        onChange={(e) => {
+                          setvideoDuration(e.target.value);
+                        }}
+                        placeholder={videoData[0]?.duration}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    {" "}
+                    <div>
+                      <label className="form-label fw-bold">Chapter ID</label>
+                      <select
+                        name="chapterID"
+                        className="form-control"
+                        onChange={(e) => {
+                          setChapterID(e.target.value);
+                        }}
+                      >
+                        <option value="">Select an Option</option>
+                        {chapterList?.map((item) => (
+                          <option key={item.ch_id} value={item.ch_id}>
+                            {item.ch_id}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div>
+                      <label className="form-label fw-bold">
+                        Video<span className="spantag"> (* mp4 or mkv)</span>
+                      </label>
+                      <input
+                        type="file"
+                        className="form-control"
+                        name="videoFile" // Corrected from filename
+                        onChange={(e) => {
+                          setcoursevideo(e.target.files[0]);
+                        }}
+                        placeholder="Upload Video"
+                        accept="video/mp4, video/mkv"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div className="form-textarea">
+                      <label className="form-label fw-bold">
+                        Video Description
+                      </label>
+                      <textarea
+                        name="video_description"
+                        className="form-control"
+                        onChange={(e) => {
+                          setvideodescription(e.target.value);
+                        }}
+                        placeholder={videoData[0]?.description}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div className="d-flex justify-content-start w-100">
+                      <button type="submit" className="btn btn-danger bg-dark">
+                        Submit
+                      </button>
+                      <button
+                        className="btn btn-danger mx-2"
+                        onClick={deleteVideoViaID}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <div className="form-inner">
-              <div>
-                <label>Chapter ID</label>
-                <select
-                  name="chapterID"
-                  onChange={(e) => {
-                    setChapterID(e.target.value);
-                  }}
-                >
-                  <option value="">Select an Option</option>
-                  {chapterList?.map((item) => (
-                    <option key={item.ch_id} value={item.ch_id}>
-                      {item.ch_id}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label>
-                  Video<span className="spantag"> (* mp4 or mkv)</span>
-                </label>
-                <input
-                  type="file"
-                  name="videoFile" // Corrected from filename
-                  onChange={(e) => {
-                    setcoursevideo(e.target.files[0]);
-                  }}
-                  placeholder="Upload Video"
-                  accept="video/mp4, video/mkv"
-                />
-              </div>
-            </div>
-
-            <div className="form-textarea">
-              <label>Video Description</label>
-              <textarea
-                name="video_description"
-                onChange={(e) => {
-                  setvideodescription(e.target.value);
-                }}
-                placeholder={videoData[0]?.description}
-              />
-            </div>
-
-            <div className="d-flex justify-content-evenly w-100">
-              <button type="submit">Submit</button>
-              <button
-                className="btn btn-ouline-danger"
-                onClick={deleteVideoViaID}
-              >
-                Delete
-              </button>
             </div>
           </form>
         </div>
@@ -228,5 +250,12 @@ export default EditCourseVideo;
 const Container = styled.div`
   textarea {
     border: 1px solid #e0e0e0;
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
   }
 `;

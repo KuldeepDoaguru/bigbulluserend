@@ -20,7 +20,7 @@ const Manageusers = () => {
   const getUsers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:6060/api/v1/auth/usersList",
+        "https://admin.bigbulls.co.in/api/v1/auth/usersList",
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -55,7 +55,7 @@ const Manageusers = () => {
       const confirm = window.confirm("Are you sure you want to delete user");
       if (confirm) {
         const response = await axios.delete(
-          `http://localhost:6060/api/v1/auth/deleteUser/${id}`,
+          `https://admin.bigbulls.co.in/api/v1/auth/deleteUser/${id}`,
           {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -79,8 +79,7 @@ const Manageusers = () => {
   return (
     <>
       <Container>
-        <Navbar />
-        <div className="container">
+        <div className="container paddingtop">
           <div className="head-main">Manage Users</div>
           <div className="searchbar">
             <svg
@@ -208,5 +207,12 @@ const Container = styled.div`
   .btnin {
     background-color: #583b04;
     color: white;
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
   }
 `;

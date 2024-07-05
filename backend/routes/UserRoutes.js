@@ -9,19 +9,12 @@ const {
   adminLoginUser,
   getUserViaId,
   manageUsers,
-  sendOtpAdmin,
   updateAdminPassword,
-  updatePassword,
-  updateProfilePicture,
   updateUsers,
   verifyOtp,
   deleteUser,
 } = require("../controllers/authController.js");
 const {
-  addToWishlist,
-  addtocartBack,
-  getCartItems,
-  getWishlistItems,
   LeaderBoardData,
   addChapterData,
   addCourseVideos,
@@ -40,13 +33,9 @@ const router = express.Router();
 router.get("/usersList", authenticate, manageUsers);
 router.put("/users/:id", updateUsers);
 router.get("/getUserViaId/:id", authenticate, getUserViaId);
-router.post("/addToWishlist/:userId/:productId", authenticate, addToWishlist);
-router.get("/getWishlistItems/:userId", authenticate, getWishlistItems);
-router.post("/addtocart/:userId/:productId", authenticate, addtocartBack);
-router.get("/getCartItems/:userId", authenticate, getCartItems);
+
 router.post("/AdminRegister", AdminRegister);
 router.post("/adminLoginUser", adminLoginUser);
-// router.post("/sendOtpAdmin", sendOtpAdmin);
 router.post("/verifyOtp", verifyOtp);
 router.put("/updateAdminPassword", updateAdminPassword);
 router.delete("/deleteUser/:userId", authenticate, deleteUser);
@@ -62,12 +51,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.put(
-  "/update-profile-picture/:userId",
-  upload.single("profilePicture"),
-  authenticate,
-  updateProfilePicture
-);
 router.get("/LeaderBoardData", authenticate, LeaderBoardData);
 
 // question paper sheet multer

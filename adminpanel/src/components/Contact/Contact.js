@@ -17,7 +17,7 @@ const Contact = () => {
   const getContact = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:6060/api/v1/auth/contactInquiry",
+        "https://admin.bigbulls.co.in/api/v1/auth/contactInquiry",
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -44,8 +44,7 @@ const Contact = () => {
   return (
     <>
       <Container>
-        <Navbar />
-        <div className="container">
+        <div className="container paddingtop">
           <div className="head-main">Contact Requests</div>
           <div className="searchbar">
             <svg
@@ -139,5 +138,11 @@ const Container = styled.div`
     background-color: #583b04;
     color: white;
     z-index: 1;
+  }
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
   }
 `;

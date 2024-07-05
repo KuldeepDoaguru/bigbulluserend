@@ -25,7 +25,7 @@ const AddChapter = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:6060/api/v1/auth/addChapterData/${cid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/addChapterData/${cid}`,
         formdata,
         {
           headers: {
@@ -49,8 +49,7 @@ const AddChapter = () => {
   return (
     <>
       <Container>
-        <div className="editcourse-outer">
-          <Navbar />
+        <div className="editcourse-outer paddingtop">
           <div className="mx-2">
             <div className="">
               <button className="btn btn-success backbtn" onClick={goBack}>
@@ -150,6 +149,13 @@ const Container = styled.div`
       background: wheat;
       color: black;
       border: none;
+    }
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
     }
   }
 `;

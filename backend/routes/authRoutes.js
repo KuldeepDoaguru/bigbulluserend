@@ -5,25 +5,21 @@ const { fileURLToPath } = require("url");
 const { dirname } = require("path");
 
 const {
-  loginController,
   profilePictureView,
   registerController,
   sendOtp,
-  updatePassword,
   contactInquiry,
   getBoughtCourseDetails,
-  sendOtpAdminRegistration,
   updateAdminDetails,
+  getAdmin,
 } = require("../controllers/authController.js");
 const {
   addCourseVideos,
-  addToCart,
   coursePage,
   createCourse,
   deleteCourse,
   editCourse,
   getAllCourses,
-  thumbnail,
   videoListViaCourseId,
 } = require("../controllers/ItemController.js");
 const authenticate = require("../middlewares/authMiddleware.js");
@@ -52,14 +48,9 @@ router.post(
 );
 
 // routing
-// REGISTER || METHOD POST
 router.post("/register", upload.single("profilePicture"), registerController);
-// router.post("/login", loginController);
 router.post("/sendOtp", sendOtp);
-router.post("/updatePassword", updatePassword);
-router.post("/add-to-cart", authenticate, addToCart);
 router.get("/getAllCourses", authenticate, getAllCourses);
-router.get("/thumbnail/:courseId", authenticate, thumbnail);
 router.get("/coursePage/:courseId", authenticate, coursePage);
 router.put(
   "/editCourse/:courseId",
@@ -95,7 +86,7 @@ router.get(
 router.get("/profilePictureView/:userId", authenticate, profilePictureView);
 router.get("/contactInquiry", authenticate, contactInquiry);
 router.get("/getBoughtCourseDetails", authenticate, getBoughtCourseDetails);
-// router.post("/sendOtpAdminRegistration", sendOtpAdminRegistration);
 router.put("/updateAdminDetails/:aid", updateAdminDetails);
+router.get("/getAdmin", getAdmin);
 
 module.exports = router;

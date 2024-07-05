@@ -21,7 +21,7 @@ const ShowChapter = () => {
   const chapterIDList = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:6060/api/v1/auth/getChapterViaId/${cid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/getChapterViaId/${cid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -42,7 +42,7 @@ const ShowChapter = () => {
     console.log(chid);
     try {
       const response = await axios.delete(
-        `http://localhost:6060/api/v1/auth/deleteChapterDataViaChid/${chid}`,
+        `https://admin.bigbulls.co.in/api/v1/auth/deleteChapterDataViaChid/${chid}`,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -72,8 +72,7 @@ const ShowChapter = () => {
   return (
     <>
       <Container>
-        <div className="">
-          <Navbar />
+        <div className="paddingtop">
           <div className="w-100">
             <div className="mx-2">
               <button className="btn btn-success backbtn" onClick={goBack}>
@@ -205,5 +204,16 @@ const Container = styled.div`
   .infobtn {
     background-color: #583b04;
     color: white;
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
+  }
+
+  .table-responsive {
+    max-height: 30rem;
   }
 `;

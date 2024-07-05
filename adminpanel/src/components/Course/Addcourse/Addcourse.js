@@ -30,7 +30,7 @@ const Addcourse = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:6060/api/v1/auth/add-course",
+        "https://admin.bigbulls.co.in/api/v1/auth/add-course",
         formdata,
         {
           headers: {
@@ -49,8 +49,7 @@ const Addcourse = () => {
   return (
     <>
       <Container>
-        <div className="Addcourse-outer">
-          <Navbar />
+        <div className="Addcourse-outer paddingtop">
           <div className="head-main"> Add New Course </div>
           <div className="new-form">
             <form onSubmit={PostData} encType="multipart/form-data">
@@ -187,5 +186,12 @@ const Container = styled.div`
     background-color: #583b04;
     color: white;
     cursor: pointer;
+  }
+
+  .paddingtop {
+    padding-top: 7rem;
+    @media screen and (max-width: 600px) {
+      padding-top: 10rem;
+    }
   }
 `;
