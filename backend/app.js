@@ -49,7 +49,7 @@ app.get("/", (req, res) => {
 });
 
 // PORT
-const PORT = process.env.PORT || 6060;
+const PORT = process.env.PORT || 7070;
 
 // run listen
 app.listen(PORT, () => {

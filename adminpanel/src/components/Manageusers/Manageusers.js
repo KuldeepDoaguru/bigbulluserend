@@ -122,7 +122,7 @@ const Manageusers = () => {
                     if (keyword === "") {
                       return true;
                     } else if (
-                      val.name.toLowerCase().includes(trimmedKeyword) ||
+                      val.firstname.toLowerCase().includes(trimmedKeyword) ||
                       val.email.toLowerCase().includes(trimmedKeyword) ||
                       val.phone.toLowerCase().includes(trimmedKeyword)
                     ) {
@@ -133,7 +133,9 @@ const Manageusers = () => {
                     return (
                       <tr className="table-row" key={e.id}>
                         <td>{e.id}</td>
-                        <td>{e.name}</td>
+                        <td>
+                          {e.firstname} {e.lastname}
+                        </td>
                         <td>{e.email}</td>
                         <td>{e.gender}</td>
                         <td>{e.phone}</td>

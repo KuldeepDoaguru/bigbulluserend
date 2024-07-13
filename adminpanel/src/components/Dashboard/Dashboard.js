@@ -124,12 +124,10 @@ const Dashboard = () => {
 
       // Calculate the count of courses sold
       console.log(filteredData);
-      const flattenedCourseIds = filteredData
-        .map((item) => JSON.parse(item.course_id))
-        .flat();
+      const flattenedCourseIds = filteredData?.map((item) => item?.course_id);
 
-      console.log(flattenedCourseIds.length);
-      setCoursesSoldCount(flattenedCourseIds.length);
+      console.log(flattenedCourseIds?.length);
+      setCoursesSoldCount(flattenedCourseIds?.length);
     };
 
     // Call the function to calculate courses sold count whenever coursesSoldTime changes

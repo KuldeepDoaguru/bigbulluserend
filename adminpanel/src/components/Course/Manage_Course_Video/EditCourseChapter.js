@@ -103,7 +103,11 @@ const EditCourseChapter = () => {
           <div className="head-main"> Edit Chapter </div>
 
           <form onSubmit={updateChapter} encType="multipart/form-data">
-            <img src={chapterList[0]?.question_sheet} alt="question sheet" />
+            <img
+              src={chapterList[0]?.question_sheet}
+              className="heighwid"
+              alt="question sheet"
+            />
             <div className="form-inner">
               <div>
                 <label className="form-label fw-bold">Chapter Name</label>
@@ -186,5 +190,10 @@ const Container = styled.div`
       color: black;
       border: none;
     }
+  }
+
+  .heighwid {
+    height: 15rem;
+    width: auto;
   }
 `;

@@ -122,16 +122,12 @@ const Recentpurchases = () => {
                         {invoicedetails.student_name}
                       </td>
                       <td className="table-small">
-                        {invoicedetails.course_id
-                          .slice(1, -1)
-                          .split(",")
-                          .map(Number)
-                          .join(", ")}
+                        {invoicedetails.course_id}
                       </td>
                       <td className="table-user">{invoicedetails.rzrpay_id}</td>
                       <td className="table-small">{invoicedetails.amount}</td>
                       <td className="table-date">
-                        {invoicedetails.purchase_time.toString().split("T")[0]}
+                        {invoicedetails.purchase_time}
                       </td>
                     </tr>
                   ))}
