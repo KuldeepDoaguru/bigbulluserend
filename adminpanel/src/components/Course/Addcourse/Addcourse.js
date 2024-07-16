@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import cogoToast from "cogo-toast";
 
 const Addcourse = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -16,18 +17,66 @@ const Addcourse = () => {
   const [course_image, setcourseimg] = useState("");
   const [course_description, setcoursedescription] = useState("");
   const [category, setCategory] = useState("");
+  const [loading, setLoading] = useState(false);
   const [course_price, setcourseprice] = useState("");
   const navigate = useNavigate();
 
+  const handleEmpProfilePicture = (e) => {
+    const selectedFile = e.target.files[0];
+    console.log(selectedFile);
+
+    if (selectedFile) {
+      const allowedSizes = [
+        { width: 5195, height: 3463 },
+        { width: 1920, height: 1280 },
+        { width: 1280, height: 853 },
+        { width: 640, height: 427 },
+      ];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
+      reader.onloadend = () => {
+        const image = new Image();
+        image.src = reader.result;
+
+        // Show the image preview before validation
+        setcourseimg({
+          file: selectedFile,
+          imageUrl: reader.result,
+        });
+
+        image.onload = () => {
+          const isValidSize = allowedSizes.some(
+            (size) => size.width === image.width && size.height === image.height
+          );
+
+          if (!isValidSize) {
+            alert(
+              `Invalid image size (${image.width}x${image.height}). Allowed sizes are: 5195×3463, 1920×1280, 1280×853, 640×427.`
+            );
+            // Reset the file input
+            e.target.value = "";
+            // Clear the image preview
+            setcourseimg({
+              file: null,
+              imageUrl: null,
+            });
+          }
+        };
+      };
+    }
+  };
+
   const formdata = new FormData();
   formdata.append("name", course_name);
-  formdata.append("thumbnails", course_image);
+  formdata.append("thumbnails", course_image.file);
   formdata.append("description", course_description);
   formdata.append("price", course_price);
   formdata.append("category", category);
 
   const PostData = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post(
         "https://admin.bigbulls.co.in/api/v1/auth/add-course",
@@ -40,9 +89,13 @@ const Addcourse = () => {
         }
       );
       console.log(response.data);
+      setLoading(false);
+      cogoToast.success("course added successfully");
       navigate("/managecourses");
     } catch (error) {
       console.log(error);
+      setLoading(false);
+      cogoToast.error(error.response.data.message);
     }
   };
 
@@ -53,64 +106,98 @@ const Addcourse = () => {
           <div className="head-main"> Add New Course </div>
           <div className="new-form">
             <form onSubmit={PostData} encType="multipart/form-data">
-              <input
-                onChange={(e) => {
-                  setcoursename(e.target.value);
-                }}
-                name="name"
-                value={course_name}
-                required
-                placeholder="Enter Course Title"
-              />
+              <div className="mb-3">
+                <label htmlFor="" class="form-label text-start fw-bold">
+                  Course Name
+                </label>
+                <input
+                  onChange={(e) => {
+                    setcoursename(e.target.value);
+                  }}
+                  name="name"
+                  value={course_name}
+                  required
+                  class="form-control"
+                  placeholder="Enter Course Title"
+                />
+              </div>
 
-              <input
-                onChange={(e) => {
-                  setCategory(e.target.value);
-                }}
-                name="category"
-                required
-                value={category}
-                placeholder="Enter Course Category Name"
-              />
-              <input
-                onChange={(e) => {
-                  const price = parseInt(e.target.value);
-                  if (price !== 0) {
-                    setcourseprice(price);
-                  } else {
-                    alert("Course price cannot be 0");
-                  }
-                }}
-                placeholder="Enter Course Price in Rupees"
-                type="number"
-                required
-                name="price"
-                value={course_price}
-              />
+              <div className="mb-3">
+                <label htmlFor="" class="form-label text-start fw-bold">
+                  Category
+                </label>
+                <input
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                  }}
+                  name="category"
+                  required
+                  class="form-control"
+                  value={category}
+                  placeholder="Enter Course Category Name"
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="" class="form-label text-start fw-bold">
+                  Course Price
+                </label>
+                <input
+                  onChange={(e) => {
+                    const price = parseInt(e.target.value);
+                    if (price !== 0) {
+                      setcourseprice(price);
+                    } else {
+                      alert("Course price cannot be 0");
+                    }
+                  }}
+                  placeholder="Enter Course Price in Rupees"
+                  type="number"
+                  required
+                  name="price"
+                  class="form-control"
+                  value={course_price}
+                />
+              </div>
 
               {/* <input onChange={(e) => { setcourseoffer(e.target.value) }} placeholder='Enter Offer Price in Rupees' type='number' /> */}
 
-              <input
-                type="file"
-                filename="thumbnails"
-                onChange={(e) => {
-                  setcourseimg(e.target.files[0]);
-                }}
-                placeholder="Upload Course Thumbnail"
-                accept="image/jpeg,image/jpg,image/png"
-                required
-              />
+              <div className="mb-3">
+                <label htmlFor="" class="form-label fw-bold">
+                  Course Image
+                </label>
 
-              <textarea
-                onChange={(e) => {
-                  setcoursedescription(e.target.value);
-                }}
-                rows={3}
-                placeholder="Course Description"
-                name="description"
-                required
-                value={course_description}
-              ></textarea>
+                <input
+                  type="file"
+                  filename="thumbnails"
+                  onChange={handleEmpProfilePicture}
+                  placeholder="Upload Course Thumbnail"
+                  accept="image/jpeg,image/jpg,image/png"
+                  class="form-control"
+                  required
+                />
+                <div id="emailHelp" class="form-text text-danger">
+                  Allowed sizes are: 5195×3463, 1920×1280, 1280×853, 640×427.
+                </div>
+              </div>
+
+              <div className="mb-3 w-100">
+                <label htmlFor="" class="form-label text-start fw-bold">
+                  Course Description
+                </label>
+                <textarea
+                  onChange={(e) => {
+                    setcoursedescription(e.target.value);
+                  }}
+                  rows={3}
+                  placeholder="Course Description"
+                  name="description"
+                  required
+                  class="form-control"
+                  value={course_description}
+                ></textarea>
+              </div>
+
               <button type="submit">Submit</button>
             </form>
           </div>
@@ -142,7 +229,7 @@ const Container = styled.div`
       input {
         width: 500px;
         padding: 10px;
-        margin: 10px 0px;
+        /* margin: 10px 0px; */
         border: 1px solid #583b04;
         border-radius: 10px;
         @media screen and (max-width: 600px) {

@@ -14,6 +14,20 @@ const RegisterAdmin = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [verification, setVerification] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [cpassword, setCpassword] = useState("");
+  const [cpass, setCpass] = useState(false);
+
+  const verifyPass = () => {
+    if (password === cpassword) {
+      setCpass(true);
+    } else {
+      setCpass(false);
+    }
+  };
+
+  useEffect(() => {
+    verifyPass();
+  }, [cpassword]);
 
   const sendOtp = async () => {
     setLoading(true);
@@ -188,14 +202,53 @@ const RegisterAdmin = () => {
                     </div>
                   </div>
 
+                  <div className="d-flex flex-row align-items-center mb-4">
+                    <i className="fas fa-lock fa-lg me-2 fa-fw"></i>
+                    <div className="form-outline flex-fill mb-0">
+                      <label className="form-label" htmlFor="form3Example4c">
+                        Confirm Password
+                      </label>
+                      <div className="input-container">
+                        <input
+                          name="cpassword"
+                          type="password"
+                          id="cpassword"
+                          value={cpassword}
+                          required
+                          onChange={(e) => setCpassword(e.target.value)}
+                          className="form-control relative d-block"
+                          placeholder="password"
+                        />
+                      </div>
+                      {!cpass && (
+                        <>
+                          <small className="text-danger">
+                            Passwords do not match
+                          </small>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <button
-                      type="submit"
-                      className="btn btn-primary btn-lg"
-                      disabled={loading}
-                    >
-                      {loading ? "Registering..." : "Register"}
-                    </button>
+                    {cpass ? (
+                      <>
+                        <button
+                          type="submit"
+                          className="btn btn-primary btn-lg"
+                          disabled={loading}
+                        >
+                          {loading ? "Registering..." : "Register"}
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {" "}
+                        <button className="btn btn-primary btn-lg" disabled>
+                          {loading ? "Registering..." : "Register"}
+                        </button>
+                      </>
+                    )}
                   </div>
                 </form>
                 <hr className="shadow" />

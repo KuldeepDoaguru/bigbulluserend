@@ -563,6 +563,79 @@ const deleteVideoViaVid = (req, res) => {
   }
 };
 
+const deleteReview = (req, res) => {
+  const rid = req.params.rid;
+  try {
+    const selectQuery = "SELECT * FROM course_review WHERE review_id = ?";
+    db.query(selectQuery, rid, (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      if (result.length === 0) {
+        res.status(400).json({ success: false, message: "Review not found" });
+      } else {
+        const deleteQuery = "DELETE FROM course_review WHERE review_id = ?";
+        db.query(deleteQuery, rid, (err, result) => {
+          if (err) {
+            res.status(400).json({ success: false, message: err.message });
+          } else {
+            res
+              .status(200)
+              .json({ success: false, message: "Review deleted successfully" });
+          }
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const getCourseAbout = (req, res) => {
+  try {
+    const cid = req.params.cid;
+    const selectQuery = "SELECT * FROM course_about WHERE course_id = ?";
+    db.query(selectQuery, cid, (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      res.status(200).send(result);
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const updateCourseAbout = (req, res) => {
+  try {
+    const cid = req.params.cid;
+    const about = req.body.about;
+    const selectQuery = "SELECT * FROM course_about WHERE course_id = ?";
+    db.query(selectQuery, cid, (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      if (result.length > 0) {
+        const updateQuery =
+          "UPDATE course_about SET about = ? WHERE course_id = ?";
+        db.query(updateQuery, [cid, about], (err, result) => {
+          if (err) {
+            res.status(400).json({ success: false, message: err.message });
+          } else {
+            res
+              .status(200)
+              .json({ success: true, message: "Details updated successfully" });
+          }
+        });
+      } else {
+        res.status(400).json({ success: false, message: "invalid course ID" });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   createCourse,
   getAllCourses,
@@ -581,4 +654,7 @@ module.exports = {
   updateChapterDataViaChid,
   deleteChapterDataViaChid,
   deleteVideoViaVid,
+  deleteReview,
+  getCourseAbout,
+  updateCourseAbout,
 };

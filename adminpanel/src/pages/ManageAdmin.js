@@ -12,6 +12,7 @@ const ManageAdmin = () => {
   console.log(user);
   const [adminList, setAdminList] = useState([]);
   const [keyword, setKeyword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const getAdminData = async () => {
     try {
@@ -39,6 +40,7 @@ const ManageAdmin = () => {
   console.log(trimmedKeyword);
 
   const approveAdmin = async (id) => {
+    setLoading(true);
     try {
       const confirm = window.confirm(
         "Are you sure you want to approve this admin?"
@@ -49,17 +51,26 @@ const ManageAdmin = () => {
           {
             approved_by: user.email,
             status: "active",
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
           }
         );
+        setLoading(false);
         getAdminData();
         cogoToast.success("Admin Approved Successfully");
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   const disApproveAdmin = async (id) => {
+    setLoading(true);
     try {
       const confirm = window.confirm(
         "Are you sure you want to disapprove this admin?"
@@ -70,13 +81,21 @@ const ManageAdmin = () => {
           {
             approved_by: user.email,
             status: "notactive",
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
           }
         );
         getAdminData();
         cogoToast.success("Admin Approved Successfully");
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -134,8 +153,9 @@ const ManageAdmin = () => {
                                 <button
                                   className="btn btn-info infobtn"
                                   onClick={() => disApproveAdmin(item.admin_id)}
+                                  disabled={loading}
                                 >
-                                  Inactive
+                                  {loading ? "Inactive..." : "Inactive"}{" "}
                                 </button>
                               </>
                             ) : (
@@ -143,8 +163,9 @@ const ManageAdmin = () => {
                                 <button
                                   className="btn btn-info"
                                   onClick={() => approveAdmin(item.admin_id)}
+                                  disabled={loading}
                                 >
-                                  active
+                                  {loading ? "active..." : "active"}
                                 </button>
                               </>
                             )}

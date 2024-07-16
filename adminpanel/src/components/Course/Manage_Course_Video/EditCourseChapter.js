@@ -18,6 +18,7 @@ const EditCourseChapter = () => {
   const [chapterName, setChapterName] = useState("");
   const [questionSheet, setQuestionSheet] = useState("");
   const [chapterList, setChapterList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const formdata = new FormData();
   formdata.append("chName", chapterName);
@@ -26,6 +27,7 @@ const EditCourseChapter = () => {
 
   const updateChapter = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.put(
         `https://admin.bigbulls.co.in/api/v1/auth/updateChapterDataViaChid/${cid}/${chid}`,
@@ -38,6 +40,7 @@ const EditCourseChapter = () => {
         }
       );
       console.log(response);
+      setLoading(false);
       navigate(`/showchapter/${cid}`);
     } catch (error) {
       console.log(error);
@@ -46,6 +49,7 @@ const EditCourseChapter = () => {
 
   /************************** start of  delete chapter section ***************************************/
   const deleteChapter = async () => {
+    setLoading(true);
     try {
       const response = await axios.delete(
         `https://admin.bigbulls.co.in/api/v1/auth/deleteChapterDataViaChid/${chid}`,
@@ -57,10 +61,12 @@ const EditCourseChapter = () => {
         }
       );
       console.log(response);
+      setLoading(false);
       cogoToast.success("chapter deleted successfully");
       navigate(`/showchapter/${cid}`);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   /************************** End of  delete chapter section ***************************************/

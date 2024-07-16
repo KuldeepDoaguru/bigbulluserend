@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import cogoToast from "cogo-toast";
 
 const Managecourses = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -54,6 +55,7 @@ const Managecourses = () => {
           }
         );
         console.log(res);
+        cogoToast.success("course deleted successfully");
         getCourse();
       }
     } catch (error) {
@@ -63,7 +65,7 @@ const Managecourses = () => {
 
   const handleSearch = () => {
     const matchingCourses = allCourses.filter((course) => {
-      return course.name.toLowerCase().includes(keyword.toLowerCase());
+      return course.name?.toLowerCase().includes(keyword?.toLowerCase());
     });
 
     console.log(matchingCourses);
@@ -134,6 +136,7 @@ const Managecourses = () => {
             <table class="table table-bordered">
               <thead className="table-head">
                 <tr>
+                  <th className="sticky">Course Image</th>
                   <th className="sticky">Course Name</th>
                   <th className="sticky">Course Category</th>
                   <th className="sticky">Courses Price</th>
@@ -147,8 +150,7 @@ const Managecourses = () => {
                     if (keyword === "") {
                       return true;
                     } else if (
-                      val.name.toLowerCase().includes(keyword) ||
-                      val.name.toLowerCase().includes(keyword)
+                      val.course_name?.toLowerCase().includes(keyword)
                     ) {
                       return val;
                     }
@@ -156,9 +158,23 @@ const Managecourses = () => {
                   .map((item, i) => {
                     return (
                       <tr className="table-row" key={item.id}>
+                        <td>
+                          <a
+                            href={`https://test.bigbulls.co.in/Cdetail/${item.course_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <img
+                              src={item.thumbnails}
+                              alt="course thumbnails"
+                              srcset=""
+                              style={{ height: "3rem" }}
+                            />
+                          </a>
+                        </td>
                         <td className="table-small" style={{ width: "25%" }}>
                           <a
-                            href={`https://bigbulls.co.in/course-details/${item.course_id}`}
+                            href={`https://test.bigbulls.co.in/Cdetail/${item.course_id}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >

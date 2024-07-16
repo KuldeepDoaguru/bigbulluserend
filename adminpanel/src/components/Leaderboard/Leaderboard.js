@@ -138,7 +138,9 @@ const Leaderboard = () => {
                       <tr className="table-row" key={user.id}>
                         <td className="table-sno">{i + 1}</td>
                         <td className="table-small">{user.email}</td>
-                        <td className="table-small">{user.name}</td>
+                        <td className="table-small">
+                          {user.firstname} {user.lastname}
+                        </td>
                         <td className="table-small">₹ {user.amount}</td>
                       </tr>
                     );

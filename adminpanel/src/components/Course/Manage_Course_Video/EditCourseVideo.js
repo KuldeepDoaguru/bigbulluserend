@@ -20,8 +20,10 @@ const EditCourseVideo = () => {
   const [chapterID, setChapterID] = useState("");
   const [video_description, setvideodescription] = useState("");
   const [course_video, setcoursevideo] = useState();
+  const [loading, setLoading] = useState(false);
   const [chapterList, setChapterList] = useState([]);
   const [videoData, setVideoData] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const getVideoViaID = async () => {
     try {
@@ -50,6 +52,7 @@ const EditCourseVideo = () => {
 
   const updateVideo = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.put(
         `https://admin.bigbulls.co.in/api/v1/auth/updateCourseVideoDetails/${vid}`,
@@ -59,17 +62,26 @@ const EditCourseVideo = () => {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${user.token}`,
           },
+          onUploadProgress: (progressEvent) => {
+            const progress = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress(progress);
+          },
         }
       );
       console.log(response);
+      setLoading(false);
       cogoToast.success("CourseVideoDetails updated successfully");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   /************************** start of  delete course section ***************************************/
   const deleteVideoViaID = async () => {
+    setLoading(true);
     try {
       const response = await axios.delete(
         `https://admin.bigbulls.co.in/api/v1/auth/deleteVideoViaVid/${vid}`,
@@ -81,10 +93,12 @@ const EditCourseVideo = () => {
         }
       );
       console.log(response);
+      setLoading(false);
       toast.success("Video delete successfully");
       navigate(`/showvideos/${cid}`);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   /************************** End of  delete course section ***************************************/
@@ -205,6 +219,18 @@ const EditCourseVideo = () => {
                         placeholder="Upload Video"
                         accept="video/mp4, video/mkv"
                       />
+                      <div className="progress mt-2">
+                        <div
+                          className="progress-bar progress-bar-striped bg-info"
+                          role="progressbar"
+                          style={{ width: `${uploadProgress}%` }}
+                          aria-valuenow={uploadProgress}
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        >
+                          {uploadProgress}%
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -224,14 +250,19 @@ const EditCourseVideo = () => {
                   </div>
                   <div className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div className="d-flex justify-content-start w-100">
-                      <button type="submit" className="btn btn-danger bg-dark">
-                        Submit
+                      <button
+                        type="submit"
+                        className="btn btn-danger bg-dark"
+                        disabled={loading}
+                      >
+                        {loading ? "Submit..." : "Submit"}
                       </button>
                       <button
                         className="btn btn-danger mx-2"
                         onClick={deleteVideoViaID}
+                        disabled={loading}
                       >
-                        Delete
+                        {loading ? "Delete..." : "Delete"}
                       </button>
                     </div>
                   </div>

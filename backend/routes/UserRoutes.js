@@ -25,6 +25,9 @@ const {
   updateChapterDataViaChid,
   deleteChapterDataViaChid,
   deleteVideoViaVid,
+  deleteReview,
+  getCourseAbout,
+  updateCourseAbout,
 } = require("../controllers/ItemController.js");
 const authenticate = require("../middlewares/authMiddleware.js");
 
@@ -117,5 +120,8 @@ router.delete(
   deleteChapterDataViaChid
 );
 router.delete("/deleteVideoViaVid/:vid", authenticate, deleteVideoViaVid);
+router.delete("/deleteReview/:rid", authenticate, deleteReview);
+router.get("/getCourseAbout/:cid", authenticate, getCourseAbout);
+router.put("/updateCourseAbout/:cid", authenticate, updateCourseAbout);
 
 module.exports = router;

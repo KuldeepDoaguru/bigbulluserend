@@ -9,23 +9,28 @@ import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import cogoToast from "cogo-toast";
 
 const Addvideo = () => {
   const user = useSelector((state) => state.user.currentUser);
   console.log(user);
   const { cid } = useParams();
   const navigate = useNavigate();
-  const [video_Duration, setvideoDuration] = useState("");
+  // const [video_Duration, setvideoDuration] = useState("");
   const [video_title, setvideotitle] = useState("");
   const [chapterID, setChapterID] = useState("");
   const [video_description, setvideodescription] = useState("");
   const [course_video, setcoursevideo] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [chapterList, setChapterList] = useState([]);
   const addVideoCourse = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    console.log(course_video);
 
     const addvideoformdata = new FormData();
-    addvideoformdata.append("duration", video_Duration);
+    // addvideoformdata.append("duration", video_Duration);
     addvideoformdata.append("title", video_title);
     addvideoformdata.append("videoFile", course_video);
     addvideoformdata.append("description", video_description);
@@ -40,14 +45,22 @@ const Addvideo = () => {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${user.token}`,
           },
+          onUploadProgress: (progressEvent) => {
+            const progress = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress(progress);
+          },
         }
       );
 
       console.log(response);
-      toast.success("Video added successfully");
+      setLoading(false);
+      cogoToast.success("Video added successfully");
       navigate(`/showvideos/${cid}`);
     } catch (error) {
       console.log(error);
+      setLoading(false);
       toast.error("Failed to add video");
     }
   };
@@ -122,7 +135,7 @@ const Addvideo = () => {
                         />
                       </div>
                     </div>
-                    <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    {/* <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                       <div>
                         <label className="form-label">Video duration</label>
                         <input
@@ -135,7 +148,7 @@ const Addvideo = () => {
                           required
                         />
                       </div>
-                    </div>
+                    </div> */}
                     <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                       <div>
                         <label className="form-label">Chapter ID</label>
@@ -150,7 +163,7 @@ const Addvideo = () => {
                           <option value="">Select an Option</option>
                           {chapterList?.map((item) => (
                             <option key={item.ch_id} value={item.ch_id}>
-                              {item.ch_id}
+                              {item.ch_name}
                             </option>
                           ))}
                         </select>
@@ -174,8 +187,20 @@ const Addvideo = () => {
                           accept="video/mp4, video/mkv"
                         />
                       </div>
+                      <div className="progress mt-2">
+                        <div
+                          className="progress-bar progress-bar-striped bg-info"
+                          role="progressbar"
+                          style={{ width: `${uploadProgress}%` }}
+                          aria-valuenow={uploadProgress}
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        >
+                          {uploadProgress}%
+                        </div>
+                      </div>
                     </div>
-                    <div className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                       <div className="form-textarea">
                         <label className="form-label">Video Description</label>
                         <textarea
@@ -195,7 +220,9 @@ const Addvideo = () => {
               <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-1 col-sm-12 col-12"></div>
             </div>
             <div className="subbtn">
-              <button type="submit">Submit</button>
+              <button type="submit" disabled={loading}>
+                {loading ? "Submit..." : "Submit"}
+              </button>
             </div>
           </form>
         </div>

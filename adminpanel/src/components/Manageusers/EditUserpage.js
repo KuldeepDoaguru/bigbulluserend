@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useSelector } from "react-redux";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import styled from "styled-components";
+import cogoToast from "cogo-toast";
 
 const EditUserpage = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -21,9 +22,11 @@ const EditUserpage = () => {
   const [allCountries, setAllCountries] = useState([]);
   const [allStates, setAllStates] = useState([]);
   const [allCities, setAllCities] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState([]);
   const [data, setData] = useState({
-    name: userData.name || "",
+    firstname: userData.firstname || "",
+    lastname: userData.lastname || "",
     phone: userData.phone || "",
     email: userData.email || "",
     gender: userData.gender || "",
@@ -169,6 +172,7 @@ const EditUserpage = () => {
 
   const updateUserProfile = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.put(
         `https://admin.bigbulls.co.in/api/v1/auth/users/${uid}`,
@@ -181,14 +185,18 @@ const EditUserpage = () => {
         }
       );
       if (response.data.success) {
-        toast.success("User details updated successfully");
+        cogoToast.success("User details updated successfully");
+        setLoading(false);
         navigate("/manageusers");
       } else {
         toast.error("Failed to update user details");
+        setLoading(false);
       }
       console.log(response.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -210,7 +218,8 @@ const EditUserpage = () => {
 
   useEffect(() => {
     setData({
-      name: userData.name,
+      firstname: userData.firstname,
+      lastname: userData.lastname,
       phone: userData.phone,
       email: userData.email,
       gender: userData.gender,
@@ -242,14 +251,27 @@ const EditUserpage = () => {
               <div className="row g-2">
                 <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                   <div className="content-half">
-                    <label className="form-label">Name</label>
+                    <label className="form-label">Firstname</label>
                     <input
                       type="text"
-                      name="name"
-                      value={data.name}
+                      name="firstname"
+                      value={data.firstname}
                       className="form-control"
                       onChange={handleInputs}
-                      placeholder={userData.name}
+                      placeholder={userData.firstname}
+                    />
+                  </div>
+                </div>
+                <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                  <div className="content-half">
+                    <label className="form-label">Lastname</label>
+                    <input
+                      type="text"
+                      name="lastname"
+                      value={data.lastname}
+                      className="form-control"
+                      onChange={handleInputs}
+                      placeholder={userData.lastname}
                     />
                   </div>
                 </div>
@@ -301,7 +323,9 @@ const EditUserpage = () => {
                 </div>
                 <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                   <div className="content-half">
-                    <label className="form-label">DOB</label>
+                    <label className="form-label">
+                      DOB - <span className="text-danger">{userData.dob}</span>
+                    </label>
 
                     <input
                       type="date"
@@ -402,8 +426,12 @@ const EditUserpage = () => {
               </div>
 
               <div className="">
-                <button className="btn btn-danger bg-dark mt-2" type="submit">
-                  Save Changes
+                <button
+                  className="btn btn-danger bg-dark mt-2"
+                  disabled={loading}
+                  type="submit"
+                >
+                  {loading ? "Save Changes..." : "Save Changes"}
                 </button>
                 {/* <button onClick={Deleteuser}>Delete User</button> */}
               </div>

@@ -33,6 +33,9 @@ import ShowChapter from "./components/Course/Manage_Course_Video/ShowChapter";
 import EditCourseChapter from "./components/Course/Manage_Course_Video/EditCourseChapter";
 import ManageAdmin from "./pages/ManageAdmin";
 import Navbar from "./components/Navbar";
+import ManageFaq from "./components/Course/Managecourses/ManageFaq";
+import ManageAbout from "./components/Course/Managecourses/ManageAbout";
+import ManageReview from "./components/Course/Managecourses/ManageReview";
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -72,6 +75,9 @@ const App = () => {
         <Route path="/admin-register" element={<RegisterAdmin />} />
         <Route path="/password-reset" element={<ForgotPassword />} />
         <Route path="/manage-admin" element={<ManageAdmin />} />
+        <Route path="/manage-faq/:cid" element={<ManageFaq />} />
+        <Route path="/manage-about/:cid" element={<ManageAbout />} />
+        <Route path="/manage-review/:cid" element={<ManageReview />} />
       </Routes>
     </BrowserRouter>
   );

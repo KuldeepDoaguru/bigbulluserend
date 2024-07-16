@@ -15,6 +15,7 @@ const AddChapter = () => {
   let navigate = useNavigate();
   const [chapterName, setChapterName] = useState("");
   const [questionSheet, setQuestionSheet] = useState("");
+  const [loading, setLoading] = useState(false);
   console.log(cid);
 
   const formdata = new FormData();
@@ -23,6 +24,7 @@ const AddChapter = () => {
   console.log(formdata);
   const addChapter = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post(
         `https://admin.bigbulls.co.in/api/v1/auth/addChapterData/${cid}`,
@@ -36,9 +38,11 @@ const AddChapter = () => {
       );
       console.log(response);
       cogoToast.success("Chapter Added succesfully");
+      setLoading(false);
       navigate(`/showchapter/${cid}`);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -104,8 +108,9 @@ const AddChapter = () => {
                 <button
                   type="submit"
                   className="btn btn-success successbtn shadow mb-2"
+                  disabled={loading}
                 >
-                  Submit
+                  {loading ? "Submit..." : "Submit"}{" "}
                 </button>
                 {/* <button className="btn btn-danger">Delete this Course</button> */}
               </div>

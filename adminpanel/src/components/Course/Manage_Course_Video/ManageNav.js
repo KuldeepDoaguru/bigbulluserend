@@ -12,6 +12,9 @@ const ManageNav = ({
   addvideo,
   addChapter,
   showchapter,
+  manageAbout,
+  manageFaq,
+  manageReview,
 }) => {
   return (
     <>
@@ -87,6 +90,48 @@ const ManageNav = ({
                   }
                 >
                   Course Chapter
+                </button>
+              </Link>
+            </div>
+            <div className="col-xxl-2 col-xl-2 col-lg-2 col-md-4 col-sm-6 col-6">
+              <Link to={`/manage-faq/${courseid}`}>
+                {" "}
+                <button
+                  className={
+                    manageFaq == true
+                      ? "btn-active shadow"
+                      : "btn btn-secondary shadow"
+                  }
+                >
+                  Manage FAQ
+                </button>
+              </Link>
+            </div>
+            <div className="col-xxl-2 col-xl-2 col-lg-2 col-md-4 col-sm-6 col-6">
+              <Link to={`/manage-about/${courseid}`}>
+                {" "}
+                <button
+                  className={
+                    manageAbout == true
+                      ? "btn-active shadow"
+                      : "btn btn-secondary shadow"
+                  }
+                >
+                  Manage About
+                </button>
+              </Link>
+            </div>
+            <div className="col-xxl-2 col-xl-2 col-lg-2 col-md-4 col-sm-6 col-6">
+              <Link to={`/manage-review/${courseid}`}>
+                {" "}
+                <button
+                  className={
+                    manageReview == true
+                      ? "btn-active shadow"
+                      : "btn btn-secondary shadow"
+                  }
+                >
+                  Manage Reviews
                 </button>
               </Link>
             </div>
