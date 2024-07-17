@@ -12,8 +12,9 @@ const ManageAbout = () => {
   const user = useSelector((state) => state.user.currentUser);
   console.log(user);
   const [courseAbout, setCourseAbout] = useState([]);
-  const [addAbout, setAddAbout] = useState("");
+  const [addAbout, setAddAbout] = useState();
   const [aboutAddEdit, setAboutAddEdit] = useState("");
+  const [createAbout, setCreateAbout] = useState();
 
   console.log(addAbout);
 
@@ -58,24 +59,51 @@ const ManageAbout = () => {
 
   console.log(toString(addAbout));
 
-  const updateAbout = async () => {
+  const updateAbout = async (e) => {
+    e.preventDefault();
+    alert(addAbout);
     try {
       const res = await axios.put(
         `https://admin.bigbulls.co.in/api/v1/auth/updateCourseAbout/${courseAbout[0]?.course_id}`,
-        { about: String(addAbout) },
+        { about: addAbout },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${user.token}`,
           },
         }
       );
       cogoToast.success("Course about updated successfully");
       getAboutData();
+      setAboutAddEdit("");
     } catch (error) {
       console.log(error);
     }
   };
+
+  console.log(courseAbout[0]?.course_id);
+
+  const creatAbout = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        `https://admin.bigbulls.co.in/api/v1/auth/createCourseAboutData/${cid}`,
+        { about: createAbout },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      cogoToast.success("Course about Added successfully");
+      getAboutData();
+      setAboutAddEdit("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Container>
@@ -138,39 +166,51 @@ const ManageAbout = () => {
                 {aboutAddEdit === "Edit" && (
                   <>
                     <h2 className="fw-bold mt-5 fs-1">Update About Details</h2>
-                    <div class="form-floating mt-2">
-                      <textarea
-                        class="form-control"
-                        placeholder="Leave a comment here"
-                        id="floatingTextarea"
-                        name="addAbout"
-                        value={addAbout}
-                        onChange={(e) => setAddAbout(e.target.value)}
-                      ></textarea>
-                      <label for="floatingTextarea">write about course</label>
-                    </div>
-                    <button
-                      className="btn btn-info mt-3 shadow"
-                      onClick={updateAbout}
-                    >
-                      Update About
-                    </button>
+                    <form onSubmit={updateAbout}>
+                      <div class="form-floating mt-2">
+                        <textarea
+                          class="form-control h-100"
+                          placeholder="Leave a comment here"
+                          id="floatingTextarea"
+                          name="addAbout"
+                          required
+                          value={addAbout}
+                          onChange={(e) => setAddAbout(e.target.value)}
+                        ></textarea>
+                        <label for="floatingTextarea">write about course</label>
+                      </div>
+                      <button
+                        className="btn btn-info mt-3 shadow"
+                        type="submit"
+                      >
+                        Update About
+                      </button>
+                    </form>
                   </>
                 )}
                 {aboutAddEdit === "Add" && (
                   <>
                     <h2 className="fw-bold mt-5 fs-3">Add About Coourse</h2>
-                    <div class="form-floating mt-2">
-                      <textarea
-                        class="form-control"
-                        placeholder="Leave a comment here"
-                        id="floatingTextarea"
-                      ></textarea>
-                      <label for="floatingTextarea">write about course</label>
-                    </div>
-                    <button className="btn btn-info mt-3 shadow">
-                      Submit About
-                    </button>
+                    <form onSubmit={creatAbout}>
+                      <div class="form-floating mt-2">
+                        <textarea
+                          class="form-control h-100"
+                          placeholder="Leave a comment here"
+                          id="floatingTextarea"
+                          name="createAbout"
+                          required
+                          value={createAbout}
+                          onChange={(e) => setCreateAbout(e.target.value)}
+                        ></textarea>
+                        <label for="floatingTextarea">write about course</label>
+                      </div>
+                      <button
+                        className="btn btn-info mt-3 shadow"
+                        type="submit"
+                      >
+                        Submit About
+                      </button>
+                    </form>
                   </>
                 )}
               </div>

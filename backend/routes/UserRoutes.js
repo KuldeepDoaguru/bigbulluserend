@@ -28,6 +28,13 @@ const {
   deleteReview,
   getCourseAbout,
   updateCourseAbout,
+  createAboutData,
+  createCourseAboutData,
+  getCourseFaq,
+  createFaq,
+  updateCourseFaq,
+  getCourseFaqbyFaqId,
+  deleteCourseFaq,
 } = require("../controllers/ItemController.js");
 const authenticate = require("../middlewares/authMiddleware.js");
 
@@ -123,5 +130,11 @@ router.delete("/deleteVideoViaVid/:vid", authenticate, deleteVideoViaVid);
 router.delete("/deleteReview/:rid", authenticate, deleteReview);
 router.get("/getCourseAbout/:cid", authenticate, getCourseAbout);
 router.put("/updateCourseAbout/:cid", authenticate, updateCourseAbout);
+router.post("/createAboutData/:cid", authenticate, createCourseAboutData);
+router.get("/getCourseFaq/:cid", authenticate, getCourseFaq);
+router.post("/createFaq/:cid", authenticate, createFaq);
+router.put("/updateCourseFaq/:cid/:fid", authenticate, updateCourseFaq);
+router.get("/getCourseFaqbyFaqId/:cid/:fid", authenticate, getCourseFaqbyFaqId);
+router.delete("/deleteCourseFaq/:cid/:fid", authenticate, deleteCourseFaq);
 
 module.exports = router;

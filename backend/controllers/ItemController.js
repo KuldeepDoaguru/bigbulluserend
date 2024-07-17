@@ -636,6 +636,174 @@ const updateCourseAbout = (req, res) => {
   }
 };
 
+const createCourseAboutData = (req, res) => {
+  try {
+    const cid = req.params.cid;
+    const { about } = req.body;
+    const selectQuery = "SELECT * FROM course_about WHERE course_id = ?";
+    db.query(selectQuery, cid, (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      if (result.length > 0) {
+        res
+          .status(400)
+          .json({ success: false, message: "about already exist" });
+      } else {
+        const insertQuery =
+          "INSERT INTO course_about (about, course_id) VALUES (?, ?)";
+        db.query(insertQuery, [about, cid], (err, result) => {
+          if (err) {
+            res.status(400).json({ success: false, message: err.message });
+          }
+          res.status(200).json({
+            success: true,
+            message: "Course About Added successfully",
+          });
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const getCourseFaq = (req, res) => {
+  try {
+    const cid = req.params.cid;
+    const selectQuery = "SELECT * FROM course_faq WHERE course_id = ?";
+    db.query(selectQuery, cid, (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      res.status(200).send(result);
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const createFaq = (req, res) => {
+  try {
+    const cid = req.params.cid;
+    const { question, answer } = req.body;
+    const InsertQuery =
+      "INSERT INTO course_faq (course_id, question, answer) VALUES (?, ?, ?)";
+    db.query(InsertQuery, [cid, question, answer], (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      res
+        .status(200)
+        .json({ success: true, message: "Faq added successfully" });
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const updateCourseFaq = (req, res) => {
+  try {
+    const cid = req.params.cid;
+    const fid = req.params.fid;
+    const { question, answer } = req.body;
+    const selectQuery =
+      "SELECT * FROM course_faq WHERE course_id = ? AND faq_id = ?";
+    db.query(selectQuery, [cid, fid], (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      if (result && result.length > 0) {
+        const updateFields = [];
+        const updateValues = [];
+
+        if (question) {
+          updateFields.push("question = ?");
+          updateValues.push(question);
+        }
+
+        if (answer) {
+          updateFields.push("answer = ?");
+          updateValues.push(answer);
+        }
+
+        const updateQuery = `UPDATE course_faq SET ${updateFields.join(
+          ", "
+        )} WHERE course_id = ? AND faq_id = ??`;
+
+        db.query(updateQuery, [...updateValues, cid, fid], (err, result) => {
+          if (err) {
+            return res.status(500).json({
+              success: false,
+              message: "Failed to update details",
+            });
+          } else {
+            return res.status(200).json({
+              success: true,
+              message: "Details updated successfully",
+            });
+          }
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid course ID and Faq ID" });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const getCourseFaqbyFaqId = (req, res) => {
+  try {
+    const cid = req.params.cid;
+    const fid = req.params.fid;
+    const selectQuery =
+      "SELECT * FROM course_faq WHERE course_id = ? AND faq_id = ?";
+    db.query(selectQuery, [cid, fid], (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      res.status(200).send(result);
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const deleteCourseFaq = (req, res) => {
+  try {
+    const cid = req.params.cid;
+    const fid = req.params.fid;
+    const selectQuery =
+      "SELECT * FROM course_faq WHERE course_id = ? AND faq_id = ?";
+    db.query(selectQuery, [cid, fid], (err, result) => {
+      if (err) {
+        res.status(400).json({ success: false, message: err.message });
+      }
+      if (result && result.length > 0) {
+        const deleteQuery =
+          "DELETE FROM course_faq WHERE course_id = ? AND faq_id = ?";
+        db.query(deleteQuery, [cid, fid], (err, result) => {
+          if (err) {
+            res.status(400).json({ success: false, message: err.message });
+          }
+          res
+            .status(200)
+            .json({ success: true, message: "FAQ deleted successfully" });
+        });
+      } else {
+        res
+          .status(400)
+          .json({ success: false, message: "Course ID or Faq Id not found" });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   createCourse,
   getAllCourses,
@@ -657,4 +825,10 @@ module.exports = {
   deleteReview,
   getCourseAbout,
   updateCourseAbout,
+  createCourseAboutData,
+  getCourseFaq,
+  createFaq,
+  updateCourseFaq,
+  getCourseFaqbyFaqId,
+  deleteCourseFaq,
 };
